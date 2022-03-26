@@ -12,6 +12,7 @@ const KEYMAP = {
 };
 
 const inputs = Array.from(Object.keys(KEYMAP)).fill(0);
+const pointer = { x: 0, y: 0, buttons: [false, false, false] };
 
 document.addEventListener("keypress", (event) => {
   if (event.code in KEYMAP && !inputs[KEYMAP[event.code]]) {
@@ -23,6 +24,28 @@ document.addEventListener("keyup", (event) => {
   if (event.code in KEYMAP) {
     inputs[KEYMAP[event.code]] = 0;
   }
+});
+
+document.addEventListener("pointermove", (event) => {
+  if (event.target === itto.canvas) {
+    const { clientX, clientY } = event;
+    const { clientWidth, clientHeight, offsetLeft, offsetTop, width, height } = itto.canvas;
+    pointer.x = parseInt(((clientX - offsetLeft) / clientWidth) * width);
+    pointer.y = parseInt(((clientY - offsetTop) / clientHeight) * height);
+  } else {
+    pointer.buttons.fill(false);
+  }
+});
+
+document.addEventListener("pointerdown", (event) => {
+  if (event.target === itto.canvas) {
+    const button = event.touches?.length > 0 ? 0 : event.button;
+    pointer.buttons[button] = true;
+  }
+});
+
+document.addEventListener("pointerup", () => {
+  pointer.buttons.fill(false);
 });
 
 const btn = (id, period = 1) => {
@@ -37,4 +60,9 @@ const btn = (id, period = 1) => {
   return false;
 };
 
-export { btn };
+const mouse = () => {
+  const button = pointer.buttons.findIndex((b) => !!b);
+  return [pointer.x, pointer.y, button !== -1 ? button : null];
+};
+
+export { btn, mouse };

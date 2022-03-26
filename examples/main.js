@@ -1,4 +1,4 @@
-import { itto, game, btn, circ, cls, line, print } from "../src";
+import { itto, game, btn, mouse, circ, cls, line, print } from "../src";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
@@ -21,8 +21,8 @@ game({
   },
 
   update: () => {
-    x = x + dx;
-    y = y + dy;
+    x = x + dx * itto.delta;
+    y = y + dy * itto.delta;
 
     if (x > itto.width - r / 2 || x < 0) {
       dx = -dx;
@@ -43,11 +43,15 @@ game({
       console.log("hello!");
     }
 
+    const [mx, my, button] = mouse();
+
     for (let i = itto.elapsed % 8; i < 136; i += 8) {
       line(i, 0, 0, 136 - i, "red", false);
       line(i + 105, 136, 240, 136 - i, "blue", false);
     }
 
     print("Hello World!", 4, 8, "white");
+    print(`Mouse: ${mx} ${my} - ${button}`, 4, 16, "white");
+    print(`DT: ${itto.delta.toFixed(3)}`, 4, 24, "white");
   },
 });

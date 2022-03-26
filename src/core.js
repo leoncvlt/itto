@@ -3,7 +3,9 @@ const itto = {
   context: null,
   width: 0,
   height: 0,
+  delta: 0,
   elapsed: 0,
+  timescale: 1,
   settings: {
     resolution: [240, 136],
     supersampling: 8,
@@ -61,12 +63,13 @@ const game = async function ({
 
   // initialize the double-buffer canvas
   const buffer = document.createElement("canvas");
-  buffer.width = itto.width * itto.settings.supersampling;
-  buffer.height = itto.height * itto.settings.supersampling;
+  const scale = itto.settings.supersampling * window.devicePixelRatio;
+  buffer.width = itto.width * scale;
+  buffer.height = itto.height * scale;
 
   itto.context = buffer.getContext("2d");
   itto.context.imageSmoothingEnabled = false;
-  itto.context.scale(itto.settings.supersampling, itto.settings.supersampling);
+  itto.context.scale(scale, scale);
 
   // the internal render function will draw the buffer onto the screen canvas
   const render = () => {
@@ -75,16 +78,26 @@ const game = async function ({
 
   await preload();
 
+  let last, now, delta;
+  const target = 1000 / 60;
+  last = performance.now();
+
   // call the init function and render the first frame
   init?.();
   render();
 
   // set up the game loop to update, draw
   const loop = () => {
+    now = performance.now();
+    delta = now - last;
+    last = now;
+
+    itto.delta = (delta / target) * itto.timescale;
+    itto.elapsed += itto.delta * itto.timescale;
+
     update?.();
     draw?.();
     render();
-    itto.elapsed++;
     window.requestAnimationFrame(loop);
   };
   window.requestAnimationFrame(loop);
