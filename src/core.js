@@ -9,6 +9,7 @@ const itto = {
   settings: {
     resolution: [240, 136],
     supersampling: 8,
+    resize: "integer",
   },
 };
 
@@ -109,15 +110,37 @@ const game = async function ({
 const resize = () => {
   let targetWidth = itto.width;
   let targetHeight = itto.height;
+
   const currentWidth = window.innerWidth - itto.width;
   const currentHeight = window.innerHeight - itto.height;
   if (currentWidth < 0 || currentHeight < 0) {
     return;
   }
-  while (targetWidth < currentWidth && targetHeight < currentHeight) {
-    targetWidth = targetWidth + itto.width;
-    targetHeight = targetHeight + itto.height;
+
+  switch (itto.settings.resize) {
+    case "integer":
+      while (targetWidth < currentWidth && targetHeight < currentHeight) {
+        targetWidth = targetWidth + itto.width;
+        targetHeight = targetHeight + itto.height;
+      }
+      break;
+
+    case "linear":
+      const targetAspect = itto.width / itto.height;
+      const currentAspect = window.innerWidth / window.innerHeight;
+      if (targetAspect > currentAspect) {
+        targetWidth = window.innerWidth;
+        targetHeight = targetWidth / targetAspect;
+      } else {
+        targetHeight = window.innerHeight;
+        targetWidth = targetHeight * targetAspect;
+      }
+      break;
+
+    default:
+      return;
   }
+
   itto.canvas.style.width = `${targetWidth}px`;
   itto.canvas.style.height = `${targetHeight}px`;
 };
