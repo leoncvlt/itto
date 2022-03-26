@@ -1,4 +1,4 @@
-import { itto, game, btn, mouse, circ, cls, line, print } from "../src";
+import { itto, game, btn, mouse, circ, cls, line, print, spr } from "../src";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
@@ -9,6 +9,10 @@ game({
   settings: {
     resolution: [240, 136],
     supersampling: 8,
+  },
+
+  assets: {
+    characters: "characters.png",
   },
 
   init: () => {
@@ -42,6 +46,8 @@ game({
     if (btn(4, false)) {
       console.log("hello!");
     }
+
+    spr("characters", 0, 0, 24, 24, 180, 68);
 
     const [mx, my, button] = mouse();
 

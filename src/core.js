@@ -1,3 +1,5 @@
+import { loadAssets } from "./assets";
+
 const itto = {
   canvas: null,
   context: null,
@@ -6,6 +8,7 @@ const itto = {
   delta: 0,
   elapsed: 0,
   timescale: 1,
+  assets: {},
   settings: {
     resolution: [240, 136],
     supersampling: 8,
@@ -37,6 +40,7 @@ const preload = async () => {
 
 const game = async function ({
   settings = { canvas: document.getElementById("itto"), ...settings },
+  assets,
   init,
   update,
   draw,
@@ -78,6 +82,7 @@ const game = async function ({
   };
 
   await preload();
+  await loadAssets(assets, itto.assets);
 
   let last, now, delta;
   const target = 1000 / 60;
