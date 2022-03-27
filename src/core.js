@@ -28,6 +28,8 @@ const proxy = new Proxy(itto, {
   },
 });
 
+window.itto = itto;
+
 const preload = async () => {
   // load the deafult font (04b11) as an embedded base64 font
   const font = new FontFace(

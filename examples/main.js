@@ -1,4 +1,4 @@
-import { itto, game, btn, mouse, circ, cls, line, print, spr } from "../src";
+import { itto, game, btn, mouse, circ, cls, line, print, spr, sound } from "../src";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
@@ -13,6 +13,7 @@ game({
 
   assets: {
     characters: "characters.png",
+    jump: "jump.wav",
   },
 
   init: () => {
@@ -47,9 +48,12 @@ game({
       console.log("hello!");
     }
 
-    spr("characters", 0, 0, 24, 24, 180, 68);
+    if (btn(5, false)) {
+      sound("jump");
+    }
 
     const [mx, my, button] = mouse();
+    spr("characters", 0, 0, 24, 24, mx - 12, my - 12);
 
     for (let i = itto.elapsed % 8; i < 136; i += 8) {
       line(i, 0, 0, 136 - i, "red", false);
@@ -58,6 +62,6 @@ game({
 
     print("Hello World!", 4, 8, "white");
     print(`Mouse: ${mx} ${my} - ${button}`, 4, 16, "white");
-    print(`DT: ${itto.delta.toFixed(3)}`, 4, 24, "white");
+    print(`Delta: ${itto.delta.toFixed(3)}`, 4, 24, "white");
   },
 });
