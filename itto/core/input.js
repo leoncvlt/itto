@@ -1,4 +1,4 @@
-import { itto } from "./core";
+import { itto } from "./itto";
 
 const KEYMAP = {
   ArrowUp: 0,

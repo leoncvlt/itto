@@ -1,4 +1,4 @@
-import { itto } from "./core";
+import { itto } from "./itto";
 
 const parseColor = (color) => {
   let value = itto.palette[color] || color;

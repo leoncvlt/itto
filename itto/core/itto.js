@@ -25,8 +25,6 @@ const proxy = new Proxy(itto, {
   },
 });
 
-window.itto = itto;
-
 const preload = async () => {
   // load the deafult font (04b11) as an embedded base64 font
   const font = new FontFace(
@@ -45,6 +43,7 @@ const game = async function ({ settings, init, update, draw }) {
       resolution: [240, 136],
       supersampling: 8,
       resize: "integer",
+      offset: 0,
       assets: {},
       palette: [],
     },
@@ -116,16 +115,22 @@ const game = async function ({ settings, init, update, draw }) {
   const resize = () => {
     let targetWidth = itto.width;
     let targetHeight = itto.height;
-
-    const currentWidth = window.innerWidth - itto.width;
-    const currentHeight = window.innerHeight - itto.height;
-    if (currentWidth < 0 || currentHeight < 0) {
-      return;
-    }
+    const parentWidth = itto.canvas.parentElement.clientWidth;
+    const parentHeight = itto.canvas.parentElement.clientHeight;
+    const offsetWidth = settings.offset[0] ?? settings.offset;
+    const offsetHeight = settings.offset[1] ?? settings.offset;
 
     switch (settings.resize) {
       case "integer":
-        while (targetWidth < currentWidth && targetHeight < currentHeight) {
+        const spareWidth = parentWidth - itto.width;
+        const spareHeight = parentHeight - itto.height;
+        if (spareWidth < 0 || spareHeight < 0) {
+          return;
+        }
+        while (
+          targetWidth + offsetWidth < spareWidth &&
+          targetHeight + offsetHeight < spareHeight
+        ) {
           targetWidth = targetWidth + itto.width;
           targetHeight = targetHeight + itto.height;
         }
@@ -133,12 +138,12 @@ const game = async function ({ settings, init, update, draw }) {
 
       case "linear":
         const targetAspect = itto.width / itto.height;
-        const currentAspect = window.innerWidth / window.innerHeight;
+        const currentAspect = parentWidth / parentHeight;
         if (targetAspect > currentAspect) {
-          targetWidth = window.innerWidth;
+          targetWidth = parentWidth + offsetWidth;
           targetHeight = targetWidth / targetAspect;
         } else {
-          targetHeight = window.innerHeight;
+          targetHeight = parentHeight + offsetHeight;
           targetWidth = targetHeight * targetAspect;
         }
         break;

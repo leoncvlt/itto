@@ -2,18 +2,19 @@
   "name": "itto",
   "private": true,
   "version": "0.0.0",
-  "main": "./dist/itto.js",
-  "module": "./dist/itto.js",
+  "main": "./dist/itto.core.js.js",
+  "module": "./dist/itto.core.js.js",
   "files": [
     "dist"
   ],
   "exports": {
-    ".": "./dist/itto.js"
+    ".": "./dist/itto.core.js",
+    "./utils": "./dist/itto.utils.js"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite ./examples",
     "build": "vite build",
-    "preview": "vite preview"
+    "build:examples": "vite build ./examples"
   },
   "devDependencies": {
     "vite": "^2.8.0"

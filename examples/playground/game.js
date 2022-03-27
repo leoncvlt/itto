@@ -1,4 +1,17 @@
-import { itto, game, btn, mouse, circ, cls, line, print, spr, sound, set, get } from "../src";
+import {
+  itto,
+  game,
+  btn,
+  mouse,
+  circ,
+  cls,
+  line,
+  print,
+  spr,
+  sound,
+  set,
+  get,
+} from "../../itto/core";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
@@ -8,10 +21,11 @@ const r = 8;
 game({
   settings: {
     resolution: [240, 136],
+    offset: [96, 64],
     supersampling: 8,
     assets: {
-      characters: "characters.png",
-      jump: "jump.wav",
+      characters: "/characters.png",
+      jump: "/jump.wav",
     },
     palette: [
       0x1a1c2c, 0x5d275d, 0xb13e53, 0xef7d57, 0xffcd75, 0xa7f070, 0x38b764, 0x257179, 0x29366f,

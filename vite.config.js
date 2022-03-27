@@ -1,30 +1,24 @@
-const path = require("path");
-import { defineConfig } from "vite";
+const { resolve } = require("path");
+const { defineConfig } = require("vite");
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  root: "./examples",
-  base: "./",
-  server: {
-    host: true,
-    open: true,
-  },
   build: {
-    outDir: "../dist",
+    outDir: "./dist",
     emptyOutDir: true,
     lib: {
       name: "itto",
-      entry: path.resolve(__dirname, "src/index.js"),
+      entry: resolve(__dirname, "itto/index.js"),
       formats: ["es"],
     },
     rollupOptions: {
       input: {
-        itto: path.resolve(__dirname, "src/index.js"),
-        // test: path.resolve(__dirname, "src/test.js"),
+        core: resolve(__dirname, "itto/core/index.js"),
+        utils: resolve(__dirname, "itto/utils/index.js"),
       },
       output: {
         // preserveModules: true,
-        entryFileNames: ({ name: fileName }) => `${fileName}.js`,
+        entryFileNames: ({ name: fileName }) => `itto.${fileName}.js`,
       },
     },
   },
