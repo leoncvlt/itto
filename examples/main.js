@@ -28,6 +28,10 @@ game({
   },
 
   update: () => {
+    if (!itto.ready) {
+      return;
+    }
+
     x = x + dx * itto.delta;
     y = y + dy * itto.delta;
 
@@ -40,6 +44,12 @@ game({
   },
 
   draw: () => {
+    if (!itto.ready) {
+      cls(0);
+      print("Now Loading...", 4, 8, 14);
+      return;
+    }
+
     cls(13);
 
     circ(x, y, 4, 14);

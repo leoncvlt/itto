@@ -8,6 +8,7 @@ const itto = {
   delta: 0,
   elapsed: 0,
   timescale: 1,
+  ready: false,
 };
 
 // add input events listeners
@@ -34,16 +35,11 @@ const preload = async () => {
   document.fonts.add(font);
 };
 
-const game = async function ({
-  settings = { canvas: document.getElementById("itto"), ...settings },
-  assets,
-  init,
-  update,
-  draw,
-}) {
+const game = async function ({ settings, init, update, draw }) {
   // apply the game settings on top of the default ones
   settings = {
     ...{
+      canvas: document.getElementById("itto"),
       resolution: [240, 136],
       supersampling: 8,
       resize: "integer",
@@ -90,7 +86,6 @@ const game = async function ({
   };
 
   await preload();
-  await loadAssets(settings.assets, itto.assets);
 
   let last, now, delta;
   const target = 1000 / 60;
@@ -156,6 +151,9 @@ const game = async function ({
 
   window.addEventListener("resize", resize);
   resize();
+
+  await loadAssets(settings.assets, itto.assets);
+  itto.ready = true;
 };
 
 export { proxy as itto, game };
