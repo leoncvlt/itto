@@ -9,13 +9,15 @@ game({
   settings: {
     resolution: [240, 136],
     supersampling: 8,
+    assets: {
+      characters: "characters.png",
+      jump: "jump.wav",
+    },
+    palette: [
+      0x1a1c2c, 0x5d275d, 0xb13e53, 0xef7d57, 0xffcd75, 0xa7f070, 0x38b764, 0x257179, 0x29366f,
+      0x3b5dc9, 0x41a6f6, 0x73eff7, 0xf4f4f4, 0x94b0c2, 0x566c86, 0x333c57,
+    ],
   },
-
-  assets: {
-    characters: "characters.png",
-    jump: "jump.wav",
-  },
-
   init: () => {
     cls("grey");
     print("Hello World!", 4, 8);
@@ -38,11 +40,11 @@ game({
   },
 
   draw: () => {
-    cls("grey");
+    cls(13);
 
-    circ(x, y, 4, "orange");
+    circ(x, y, 4, 14);
 
-    circ(120, 68, Math.abs(Math.sin(itto.elapsed / 8)) * 8 + 8, "green");
+    circ(120, 68, Math.abs(Math.sin(itto.elapsed / 8)) * 8 + 8, 6);
 
     if (btn(4, false)) {
       console.log("hello!");
@@ -56,12 +58,12 @@ game({
     spr("characters", 0, 0, 24, 24, mx - 12, my - 12);
 
     for (let i = itto.elapsed % 8; i < 136; i += 8) {
-      line(i, 0, 0, 136 - i, "red", false);
-      line(i + 105, 136, 240, 136 - i, "blue", false);
+      line(i, 0, 0, 136 - i, 2, false);
+      line(i + 105, 136, 240, 136 - i, 9, false);
     }
 
-    print("Hello World!", 4, 8, "white");
-    print(`Mouse: ${mx} ${my} - ${button}`, 4, 16, "white");
-    print(`Delta: ${itto.delta.toFixed(3)}`, 4, 24, "white");
+    print("Hello World!", 4, 8);
+    print(`Mouse: ${mx} ${my} - ${button}`, 4, 16);
+    print(`Delta: ${itto.delta.toFixed(3)}`, 4, 24);
   },
 });

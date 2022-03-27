@@ -8,12 +8,6 @@ const itto = {
   delta: 0,
   elapsed: 0,
   timescale: 1,
-  assets: {},
-  settings: {
-    resolution: [240, 136],
-    supersampling: 8,
-    resize: "integer",
-  },
 };
 
 // add input events listeners
@@ -47,8 +41,20 @@ const game = async function ({
   update,
   draw,
 }) {
-  // apply the new game settings
-  itto.settings = { ...itto.settings, ...settings };
+  // apply the game settings on top of the default ones
+  settings = {
+    ...{
+      resolution: [240, 136],
+      supersampling: 8,
+      resize: "integer",
+      assets: {},
+      palette: [],
+    },
+    ...settings,
+  };
+
+  itto.assets = settings.assets;
+  itto.palette = settings.palette;
 
   // initialize the game canvas
   itto.canvas = document.getElementById("itto");
@@ -70,7 +76,7 @@ const game = async function ({
 
   // initialize the double-buffer canvas
   const buffer = document.createElement("canvas");
-  const scale = itto.settings.supersampling * window.devicePixelRatio;
+  const scale = settings.supersampling * window.devicePixelRatio;
   buffer.width = itto.width * scale;
   buffer.height = itto.height * scale;
 
@@ -84,7 +90,7 @@ const game = async function ({
   };
 
   await preload();
-  await loadAssets(assets, itto.assets);
+  await loadAssets(settings.assets, itto.assets);
 
   let last, now, delta;
   const target = 1000 / 60;
@@ -110,46 +116,46 @@ const game = async function ({
   };
   window.requestAnimationFrame(loop);
 
+  const resize = () => {
+    let targetWidth = itto.width;
+    let targetHeight = itto.height;
+
+    const currentWidth = window.innerWidth - itto.width;
+    const currentHeight = window.innerHeight - itto.height;
+    if (currentWidth < 0 || currentHeight < 0) {
+      return;
+    }
+
+    switch (settings.resize) {
+      case "integer":
+        while (targetWidth < currentWidth && targetHeight < currentHeight) {
+          targetWidth = targetWidth + itto.width;
+          targetHeight = targetHeight + itto.height;
+        }
+        break;
+
+      case "linear":
+        const targetAspect = itto.width / itto.height;
+        const currentAspect = window.innerWidth / window.innerHeight;
+        if (targetAspect > currentAspect) {
+          targetWidth = window.innerWidth;
+          targetHeight = targetWidth / targetAspect;
+        } else {
+          targetHeight = window.innerHeight;
+          targetWidth = targetHeight * targetAspect;
+        }
+        break;
+
+      default:
+        return;
+    }
+
+    itto.canvas.style.width = `${targetWidth}px`;
+    itto.canvas.style.height = `${targetHeight}px`;
+  };
+
   window.addEventListener("resize", resize);
   resize();
-};
-
-const resize = () => {
-  let targetWidth = itto.width;
-  let targetHeight = itto.height;
-
-  const currentWidth = window.innerWidth - itto.width;
-  const currentHeight = window.innerHeight - itto.height;
-  if (currentWidth < 0 || currentHeight < 0) {
-    return;
-  }
-
-  switch (itto.settings.resize) {
-    case "integer":
-      while (targetWidth < currentWidth && targetHeight < currentHeight) {
-        targetWidth = targetWidth + itto.width;
-        targetHeight = targetHeight + itto.height;
-      }
-      break;
-
-    case "linear":
-      const targetAspect = itto.width / itto.height;
-      const currentAspect = window.innerWidth / window.innerHeight;
-      if (targetAspect > currentAspect) {
-        targetWidth = window.innerWidth;
-        targetHeight = targetWidth / targetAspect;
-      } else {
-        targetHeight = window.innerHeight;
-        targetWidth = targetHeight * targetAspect;
-      }
-      break;
-
-    default:
-      return;
-  }
-
-  itto.canvas.style.width = `${targetWidth}px`;
-  itto.canvas.style.height = `${targetHeight}px`;
 };
 
 export { proxy as itto, game };
