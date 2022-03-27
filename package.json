@@ -12,11 +12,13 @@
     "./utils": "./dist/itto.utils.js"
   },
   "scripts": {
-    "start": "vite ./examples",
+    "start": "node ./scripts/start-example.js",
     "build": "vite build",
+    "start:examples": "vite ./examples --open",
     "build:examples": "vite build ./examples"
   },
   "devDependencies": {
+    "entoli": "^1.4.3",
     "vite": "^2.8.0"
   }
 }

@@ -6,7 +6,6 @@ export default defineConfig({
   publicDir: "assets",
   server: {
     host: true,
-    open: true,
   },
   resolve: {
     preserveSymlinks: true,
@@ -16,6 +15,7 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
+        hello: resolve(__dirname, "hello/index.html"),
         playground: resolve(__dirname, "playground/index.html"),
       },
     },
