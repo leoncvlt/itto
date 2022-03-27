@@ -14,8 +14,8 @@ const KEYMAP = {
 const inputs = Array.from(Object.keys(KEYMAP)).fill(0);
 const pointer = { x: 0, y: 0, buttons: [false, false, false] };
 
-document.addEventListener("keypress", (event) => {
-  if (event.code in KEYMAP && !inputs[KEYMAP[event.code]]) {
+document.addEventListener("keydown", (event) => {
+  if (event.code in KEYMAP && !inputs[KEYMAP[event.code]] && !event.repeat) {
     inputs[KEYMAP[event.code]] = itto.elapsed;
   }
 });
@@ -51,9 +51,9 @@ document.addEventListener("pointerup", () => {
 const btn = (id, period = 1) => {
   if (inputs[id]) {
     const delta = itto.elapsed - inputs[id];
-    const triggered = !!period ? delta === 0 || delta > period : delta === 0;
+    const triggered = !!period ? delta === 0 || delta > period : true;
     if (triggered) {
-      inputs[id] += period || 0;
+      inputs[id] = period ? inputs[id] + period * itto.delta : 0;
       return true;
     }
   }
