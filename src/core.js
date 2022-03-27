@@ -1,14 +1,17 @@
 import { loadAssets } from "./assets";
 
 const itto = {
+  // read-only
   canvas: null,
   context: null,
   width: 0,
   height: 0,
   delta: 0,
   elapsed: 0,
-  timescale: 1,
   ready: false,
+  // user-writable
+  timescale: 1,
+  store: {},
 };
 
 // add input events listeners
@@ -16,10 +19,9 @@ import "./input";
 
 const proxy = new Proxy(itto, {
   set(target, prop, val) {
-    throw new Error("Access denied");
-  },
-  get(target, prop) {
-    return target[prop];
+    if (!["timescale"].includes(prop)) {
+      throw new Error("game object is read-only");
+    }
   },
 });
 
@@ -157,5 +159,3 @@ const game = async function ({ settings, init, update, draw }) {
 };
 
 export { proxy as itto, game };
-
-export { cls, line, rect, circ, print } from "./drawing";

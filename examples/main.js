@@ -1,4 +1,4 @@
-import { itto, game, btn, mouse, circ, cls, line, print, spr, sound } from "../src";
+import { itto, game, btn, mouse, circ, cls, line, print, spr, sound, set, get } from "../src";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
@@ -64,6 +64,10 @@ game({
       sound("jump");
     }
 
+    if (btn(6, false)) {
+      set("score", Math.floor(Math.random() * 1000));
+    }
+
     const [mx, my, button] = mouse();
     spr("characters", 0, 0, 24, 24, mx - 12, my - 12);
 
@@ -75,5 +79,6 @@ game({
     print("Hello World!", 4, 8);
     print(`Mouse: ${mx} ${my} - ${button}`, 4, 16);
     print(`Delta: ${itto.delta.toFixed(3)}`, 4, 24);
+    print(`Score: ${get("score", 0)}`, 4, 32);
   },
 });
