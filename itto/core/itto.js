@@ -22,6 +22,8 @@ const proxy = new Proxy(itto, {
     if (!["timescale"].includes(prop)) {
       throw new Error("game object is read-only");
     }
+    target[prop] = val;
+    return true;
   },
 });
 
@@ -88,22 +90,22 @@ const game = async function ({ settings, init, update, draw }) {
 
   await preload();
 
-  let last, now, delta;
-  const target = 1000 / 60;
-  last = performance.now();
-
   // call the init function and render the first frame
   init?.();
   render();
 
+  let last, now, difference;
+  const target = 1000 / 60;
+  last = performance.now();
+
   // set up the game loop to update, draw
   const loop = () => {
     now = performance.now();
-    delta = now - last;
+    difference = now - last;
     last = now;
 
-    itto.delta = (delta / target) * itto.timescale;
-    itto.elapsed += itto.delta * itto.timescale;
+    itto.delta = (difference / target) * itto.timescale;
+    itto.elapsed += itto.delta;
 
     update?.();
     draw?.();
