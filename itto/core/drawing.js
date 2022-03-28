@@ -29,26 +29,24 @@ const line = (x0, y0, x1, y1, color = 0) => {
 
 const rect = (x, y, w, h, color = 0, border = false) => {
   const { context } = itto;
-  if (border) {
-    context.strokeStyle = parseColor(color);
-    context.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, w, h);
-  } else {
+  if (!border) {
     context.fillStyle = parseColor(color);
     context.fillRect(Math.round(x), Math.round(y), w, h);
   }
+  context.strokeStyle = parseColor(color);
+  context.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, w, h);
 };
 
 const circ = (x, y, r, color = 0, border = false) => {
   const { context } = itto;
   context.beginPath();
-  context.arc(Math.round(x), Math.round(y), r, 0, Math.PI * 2);
-  if (border) {
-    context.strokeStyle = parseColor(color);
-    context.stroke();
-  } else {
+  context.arc(Math.round(x), Math.round(y), r - 0.5, 0, Math.PI * 2);
+  if (!border) {
     context.fillStyle = parseColor(color);
     context.fill();
   }
+  context.strokeStyle = parseColor(color);
+  context.stroke();
 };
 
 const spr = (spritesheet, sx = 0, sy = 0, w = 0, h = 0, x = 0, y = 0) => {
