@@ -49,6 +49,9 @@ document.addEventListener("pointerup", () => {
 });
 
 const btn = (id, period = 1) => {
+  if (id === undefined) {
+    return inputs.some((i) => !!i);
+  }
   if (inputs[id]) {
     const delta = itto.elapsed - inputs[id];
     const triggered = !!period ? delta === 0 || delta > period : true;
