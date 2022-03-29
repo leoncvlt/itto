@@ -34,7 +34,7 @@ const rect = (x, y, w, h, color = 0, border = false) => {
     context.fillRect(Math.round(x), Math.round(y), w, h);
   }
   context.strokeStyle = parseColor(color);
-  context.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, w, h);
+  context.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, w - 1, h - 1);
 };
 
 const circ = (x, y, r, color = 0, border = false) => {
