@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "node ./scripts/start-example.js",
-    "build": "vite build",
+    "build": "vite build ./itto",
     "start:examples": "vite ./examples --open",
     "build:examples": "vite build ./examples"
   },

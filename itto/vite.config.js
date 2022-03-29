@@ -8,13 +8,13 @@ export default defineConfig({
     emptyOutDir: true,
     lib: {
       name: "itto",
-      entry: resolve(__dirname, "itto/index.js"),
+      entry: resolve(__dirname, "core/index.js"),
       formats: ["es"],
     },
     rollupOptions: {
       input: {
-        core: resolve(__dirname, "itto/core/index.js"),
-        utils: resolve(__dirname, "itto/utils/index.js"),
+        core: resolve(__dirname, "core/index.js"),
+        utils: resolve(__dirname, "utils/index.js"),
       },
       output: {
         // preserveModules: true,
