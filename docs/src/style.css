@@ -1,0 +1,145 @@
+:root {
+  --background-body: #202b38;
+  --background-body-alt: hsl(213, 27%, 15%);
+  --background: #161f27;
+  --background-alt: #1a242f;
+  --selection: #1c76c5;
+  --text-main: #dbdbdb;
+  --text-bright: #fff;
+  --text-muted: #a9b1ba;
+  --links: #41adff;
+  --focus: #0096bfab;
+  --border: #526980;
+  --code: #ffbe85;
+  --animation-duration: 0.1s;
+  --button-base: #0c151c;
+  --button-hover: #040a0f;
+  --scrollbar-thumb: var(--button-hover);
+  --scrollbar-thumb-hover: color-mod(var(--scrollbar-thumb) lightness(-30%));
+  --form-placeholder: #a9a9a9;
+  --form-text: #fff;
+  --variable: #d941e2;
+  --highlight: #efdb43;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-size: 14px;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: system-ui;
+  background-color: var(--background-body);
+  color: var(--text-main);
+  text-rendering: optimizeLegibility;
+  max-width: 960px;
+  margin: auto;
+}
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+aside {
+  position: sticky;
+  align-self: flex-start;
+  top: 0;
+  min-width: 25%;
+  max-width: 18rem;
+  padding: 1rem;
+}
+aside a {
+  padding: 0.3rem 1rem;
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+aside a:hover {
+  background-color: var(--selection);
+}
+aside h1 {
+  font-weight: 800;
+  font-size: 3rem;
+  padding: 0.1rem 1rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+aside h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.1rem 1rem;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+section {
+  flex: 1;
+  /* background: darkgray; */
+  padding: 1rem;
+}
+
+a {
+  color: var(--links);
+}
+
+code,
+samp,
+time {
+  background: var(--background);
+  color: var(--code);
+  padding: 2.5px 5px;
+  border-radius: 6px;
+  font-size: 1em;
+}
+
+pre > code {
+  padding: 10px;
+  display: block;
+  overflow-x: auto;
+}
+
+var {
+  color: var(--variable);
+  font-style: normal;
+  font-family: monospace;
+}
+
+kbd {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text-main);
+  padding: 2px 4px 2px 4px;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+table caption {
+  text-align: left;
+}
+
+td,
+th {
+  padding: 6px;
+  text-align: left;
+  vertical-align: middle;
+  word-wrap: break-word;
+}
+
+thead {
+  border-bottom: 1px solid var(--border);
+}
+
+tfoot {
+  border-top: 1px solid var(--border);
+}
+
+tbody tr:nth-child(even) {
+  background-color: var(--background-body-alt);
+}

@@ -15,10 +15,15 @@
     "start": "node ./scripts/start-example.js",
     "build": "vite build ./itto",
     "start:examples": "vite ./examples --open",
-    "build:examples": "vite build ./examples"
+    "build:examples": "vite build ./examples",
+    "start:docs": "node ./scripts/build-docs.js watch",
+    "build:docs": "node ./scripts/build-docs.js build /itto"
   },
   "devDependencies": {
     "entoli": "^1.4.3",
+    "jsdoc-to-markdown": "^7.1.1",
+    "jsdom": "^19.0.0",
+    "marked": "^4.0.12",
     "vite": "^2.8.0"
   }
 }
