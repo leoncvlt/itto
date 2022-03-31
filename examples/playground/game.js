@@ -3,11 +3,11 @@ import {
   game,
   btn,
   mouse,
-  circ,
+  circle,
   cls,
   line,
-  print,
-  spr,
+  text,
+  image,
   sound,
   set,
   get,
@@ -34,7 +34,7 @@ game({
   },
   init: () => {
     cls("grey");
-    print("Hello World!", 4, 8);
+    text("Hello World!", 4, 8);
     line(0, 0, 240, 136, "black", true);
     line(0, 136, 136, 0, "black");
     x = itto.width / 2;
@@ -60,15 +60,15 @@ game({
   draw: () => {
     if (!itto.ready) {
       cls(0);
-      print("Now Loading...", 4, 8, 14);
+      text("Now Loading...", 4, 8, 14);
       return;
     }
 
     cls(13);
 
-    circ(x, y, 4, 14);
+    circle(x, y, 4, 14);
 
-    circ(120, 68, Math.abs(Math.sin(itto.elapsed / 8)) * 8 + 8, 6);
+    circle(120, 68, Math.abs(Math.sin(itto.elapsed / 8)) * 8 + 8, 6);
 
     if (btn(4, false)) {
       console.log("hello!");
@@ -82,17 +82,26 @@ game({
       set("score", Math.floor(Math.random() * 1000));
     }
 
-    const [mx, my, button] = mouse();
-    spr("characters", 0, 0, 24, 24, mx - 12, my - 12);
+    const [mx, my] = mouse();
+
+    image("characters", itto.width * 0.33 - 12, itto.height / 2 - 12, 48, 0, 24, 24, {
+      scale: [Math.sin(itto.elapsed / 8), 1],
+    });
+
+    image("characters", itto.width * 0.66 - 12, itto.height / 2 - 12, 96, 0, 24, 24, {
+      angle: itto.elapsed / 8,
+    });
+
+    image("characters", mx - 12, my - 12, 0, 0, 24, 24);
 
     for (let i = itto.elapsed % 8; i < 136; i += 8) {
       line(i, 0, 0, 136 - i, 2, false);
       line(i + 105, 136, 240, 136 - i, 9, false);
     }
 
-    print("Hello World!", 4, 8);
-    print(`Mouse: ${mx} ${my} - ${button}`, 4, 16);
-    print(`Delta: ${itto.delta.toFixed(3)}`, 4, 24);
-    print(`Score: ${get("score", 0)}`, 4, 32);
+    text("Hello World!", 4, 8);
+    text(`Mouse: ${mx} ${my}`, 4, 16);
+    text(`Delta: ${itto.delta.toFixed(3)}`, 4, 24);
+    text(`Score: ${get("score", 0)}`, 4, 32);
   },
 });

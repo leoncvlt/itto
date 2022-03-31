@@ -1,4 +1,4 @@
-import { btn, circ, cls, game, get, itto, print, rect, set } from "../../itto/core";
+import { btn, circle, cls, game, get, itto, text, rect, set } from "../../itto/core";
 
 let timer = 0;
 let score, top;
@@ -147,15 +147,15 @@ game({
     // clear the screen
     cls(6);
 
-    circ(snake.x + 4, snake.y + 4, 4, alive ? 7 : 15);
+    circle(snake.x + 4, snake.y + 4, 4, alive ? 7 : 15);
     snake.body.forEach((body) => {
-      circ(body.x + 4, body.y + 4, 4, alive ? 7 : 15);
+      circle(body.x + 4, body.y + 4, 4, alive ? 7 : 15);
     });
 
-    circ(food.x + 4, food.y + 4, 4, 2);
+    circle(food.x + 4, food.y + 4, 4, 2);
 
     rect(0, 0, itto.width, 8, 15);
-    print(`SCORE ${score.toString().padStart(3, "0")}`, 2, 7, 14);
-    print(`TOP ${top.toString().padStart(3, "0")}`, itto.width - 47, 7, 14);
+    text(`SCORE ${score.toString().padStart(3, "0")}`, 2, 7, 14);
+    text(`TOP ${top.toString().padStart(3, "0")}`, itto.width - 47, 7, 14);
   },
 });

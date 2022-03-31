@@ -1,4 +1,4 @@
-import { btn, circ, cls, game, get, itto, print, rect, set } from "../../itto/core";
+import { btn, circle, cls, game, get, itto, text, rect, set } from "../../itto/core";
 
 let score, top, lives;
 let started = false;
@@ -158,8 +158,8 @@ game({
     });
 
     // draw the ball, and a highlight
-    circ(ball.x, ball.y, ball.r, 15);
-    circ(ball.x + 1, ball.y - 1, ball.r / 2, 14);
+    circle(ball.x, ball.y, ball.r, 15);
+    circle(ball.x + 1, ball.y - 1, ball.r / 2, 14);
 
     // draw the paddle
     rect(paddle.x, paddle.y, paddle.w, paddle.h, 15);
@@ -169,13 +169,13 @@ game({
 
     if (!started) {
       // if the game has not started, draw the high score and instructions to start
-      print(`TOP ${top.toString().padStart(3, "0")}`, 4, 11, 14);
-      print(`Press (A) to start`, 124, 11, 14);
+      text(`TOP ${top.toString().padStart(3, "0")}`, 4, 11, 14);
+      text(`Press (A) to start`, 124, 11, 14);
     } else {
       // if the game is running, draw the current score and the number of lives
-      print(`SCORE ${score.toString().padStart(3, "0")}`, 4, 11, 14);
+      text(`SCORE ${score.toString().padStart(3, "0")}`, 4, 11, 14);
       for (let i = 0; i < lives; i++) {
-        circ(itto.width - 8 - i * 12, 8, 4, 14);
+        circle(itto.width - 8 - i * 12, 8, 4, 14);
       }
     }
   },

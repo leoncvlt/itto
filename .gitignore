@@ -22,7 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# index.html inside each example
-# (will be symlinked by the start-example script)
-examples/**/index.html
