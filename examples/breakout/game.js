@@ -1,4 +1,4 @@
-import { btn, circle, cls, game, get, itto, text, rect, set } from "../../itto/core";
+import { input, circle, cls, game, get, itto, text, rect, set } from "../../itto/core";
 
 let score, top, lives;
 let started = false;
@@ -48,7 +48,7 @@ const rebuild = () => {
   const h = 8;
   for (let x = 0; x < 8; x++) {
     for (let y = 0; y < 6; y++) {
-      bricks.push({ x: x * w, y: 16 + y * h, w: w - 1, h: h - 1, color: y + 2 });
+      bricks.push({ x: x * w, y: 8 + y * h, w, h, color: y + 2 });
     }
   }
 };
@@ -70,18 +70,18 @@ game({
   update: () => {
     if (!started) {
       // if the game is not running, wait for user input to start the game and launch the ball
-      if (btn(4, false)) {
+      if (input("A", false)) {
         started = true;
         launch();
       }
     } else {
       // move the paddle within the game bounds
-      if (btn(2)) {
+      if (input("left")) {
         if (paddle.x > 0) {
           paddle.x -= 2 * itto.delta;
         }
       }
-      if (btn(3)) {
+      if (input("right")) {
         if (paddle.x < itto.width - paddle.w) {
           paddle.x += 2 * itto.delta;
         }
@@ -90,7 +90,7 @@ game({
       // if the ball is still, move it above the paddle so the user can launch it
       // if not, move the ball according to its speed and direction
       if (ball.speed === 0) {
-        if (btn(4, false)) {
+        if (input("A", false)) {
           launch();
         }
         ball.x = paddle.x + paddle.w / 2;
@@ -127,7 +127,7 @@ game({
       if (ball.x < 0 || ball.x > itto.width) {
         ball.dx *= -1;
       }
-      if (ball.y < 16) {
+      if (ball.y < 8) {
         ball.dy = 1;
       }
 
@@ -165,17 +165,17 @@ game({
     rect(paddle.x, paddle.y, paddle.w, paddle.h, 15);
 
     // draw the interface background
-    rect(0, 0, itto.width, 16, 15);
+    rect(0, 0, itto.width, 8, 15);
 
     if (!started) {
       // if the game has not started, draw the high score and instructions to start
-      text(`TOP ${top.toString().padStart(3, "0")}`, 4, 11, 14);
-      text(`Press (A) to start`, 124, 11, 14);
+      text(`TOP ${top.toString().padStart(3, "0")}`, 2, 7, 14);
+      text(`Press (A) to start`, itto.width - 2, 7, 14, { align: "right" });
     } else {
       // if the game is running, draw the current score and the number of lives
-      text(`SCORE ${score.toString().padStart(3, "0")}`, 4, 11, 14);
+      text(`SCORE ${score.toString().padStart(3, "0")}`, 2, 7, 14);
       for (let i = 0; i < lives; i++) {
-        circle(itto.width - 8 - i * 12, 8, 4, 14);
+        circle(itto.width - 4 - i * 6, 4, 2, 14);
       }
     }
   },

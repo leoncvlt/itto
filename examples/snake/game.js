@@ -1,4 +1,4 @@
-import { btn, circle, cls, game, get, itto, text, rect, set } from "../../itto/core";
+import { input, circle, cls, game, get, itto, text, rect, set } from "../../itto/core";
 
 let timer = 0;
 let score, top;
@@ -65,28 +65,28 @@ game({
   },
   update: () => {
     if (!alive) {
-      if (btn()) {
+      if (input()) {
         reset();
       }
       return;
     }
 
     if (snake.cy === 0) {
-      if (btn(0)) {
+      if (input("up")) {
         snake.dx = 0;
         snake.dy = -1;
       }
-      if (btn(1)) {
+      if (input("down")) {
         snake.dx = 0;
         snake.dy = 1;
       }
     }
     if (snake.cx === 0) {
-      if (btn(2)) {
+      if (input("left")) {
         snake.dx = -1;
         snake.dy = 0;
       }
-      if (btn(3)) {
+      if (input("right")) {
         snake.dx = 1;
         snake.dy = 0;
       }
@@ -156,6 +156,6 @@ game({
 
     rect(0, 0, itto.width, 8, 15);
     text(`SCORE ${score.toString().padStart(3, "0")}`, 2, 7, 14);
-    text(`TOP ${top.toString().padStart(3, "0")}`, itto.width - 47, 7, 14);
+    text(`TOP ${top.toString().padStart(3, "0")}`, itto.width - 1, 7, 14, { align: "right" });
   },
 });

@@ -1,8 +1,8 @@
 import {
   itto,
   game,
-  btn,
-  mouse,
+  input,
+  pointer,
   circle,
   cls,
   line,
@@ -70,19 +70,11 @@ game({
 
     circle(120, 68, Math.abs(Math.sin(itto.elapsed / 8)) * 8 + 8, 6);
 
-    if (btn(4, false)) {
-      console.log("hello!");
-    }
-
-    if (btn(5, false)) {
+    if (input("A", false)) {
       sound("jump");
     }
 
-    if (btn(6, false)) {
-      set("score", Math.floor(Math.random() * 1000));
-    }
-
-    const [mx, my] = mouse();
+    const [mx, my] = pointer();
 
     image("characters", itto.width * 0.33 - 12, itto.height / 2 - 12, 48, 0, 24, 24, {
       scale: [Math.sin(itto.elapsed / 8), 1],
@@ -99,9 +91,16 @@ game({
       line(i + 105, 136, 240, 136 - i, 9, false);
     }
 
-    text("Hello World!", 4, 8);
-    text(`Mouse: ${mx} ${my}`, 4, 16);
-    text(`Delta: ${itto.delta.toFixed(3)}`, 4, 24);
-    text(`Score: ${get("score", 0)}`, 4, 32);
+    let touches = 0;
+    if (input("touchthree")) touches = 3;
+    else if (input("touchtwo")) touches = 2;
+    else if (input("touch")) touches = 1;
+    else touches = 0;
+
+    const LN = 8;
+    text("Hello World!", 4, LN);
+    text(`pointer: ${mx} ${my} ${input("mouse")}`, 4, LN * 2);
+    text(`touches: ${[touches]}`, 4, LN * 3);
+    text(`Delta: ${itto.delta.toFixed(3)}`, 4, LN * 4);
   },
 });
