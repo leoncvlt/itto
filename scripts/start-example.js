@@ -26,11 +26,13 @@ choice().then((choice) => {
   console.log(`Starting example at ${path}`);
   try {
     symlinkSync(
-      join(process.cwd(), "create-itto", "index.html"),
+      join(process.cwd(), "create-itto", "src", "index.html"),
       join(process.cwd(), path, "index.html"),
       "file"
     );
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
   const vite = spawn("npm run start:examples", [`/${slug}/`], {
     shell: true,
     stdio: "inherit",

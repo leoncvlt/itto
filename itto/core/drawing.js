@@ -1,3 +1,8 @@
+/**
+ * @file Manages the configuration settings for the widget.
+ * @author Rowina Sanela 
+ */
+
 import { itto } from "./itto";
 
 const parseColor = (color) => {
@@ -50,12 +55,14 @@ const line = (x0, y0, x1, y1, color = 0) => {
  */
 const rect = (x, y, w, h, color = 0, border = false) => {
   const { context } = itto;
+  context.save();
   if (!border) {
     context.fillStyle = parseColor(color);
     context.fillRect(Math.round(x), Math.round(y), w, h);
   }
   context.strokeStyle = parseColor(color);
   context.strokeRect(Math.round(x) + 0.5, Math.round(y) + 0.5, w - 1, h - 1);
+  context.restore();
 };
 
 /**
@@ -90,17 +97,17 @@ const circle = (x, y, r, color = 0, border = false) => {
  * @param {number} h - height of the portion of the source image to draw.
  *  If undefined, defaults to the natural height of the image.
  * @param {object} options - additional options
- * @param {number[]} options.origin - array of [x, y] coordinates of the origin.
- *  Defaults to the top left corner [0, 0]
- * @param {number[]} options.anchor - array of [x, y] coordinates to apply scale / rotation from
- * @param {number[]} options.scale - array of [x, y] scale factor values
+ * @param {number[]} options.origin - `[x, y]` tuple of the coordinates of the origin.
+ *  Defaults to the top left corner `[0, 0]`
+ * @param {number[]} options.anchor - `[x, y]` tuple of the coordinates to apply scale / rotation from
+ * @param {number[]} options.scale - `[x, y]` tuple of the scale factor values
  * @param {number} options.angle - angle to rotate the image by
  */
 const image = (image, x, y, sx, sy, w, h, { origin = [0, 0], anchor, scale, angle } = {}) => {
   const { context, assets } = itto;
   const src = typeof image === "string" ? assets[image] : image;
   if (!(src instanceof Image)) {
-    console.warn("Attempting to draw a non-image object");
+    console.warn("Attempting to draw an invalid image");
     return;
   }
 
@@ -111,9 +118,13 @@ const image = (image, x, y, sx, sy, w, h, { origin = [0, 0], anchor, scale, angl
     h = src.height;
   }
 
-  context.save();
-  context.translate(Math.round(x - origin[0]), Math.round(y - origin[1]));
+  let restore = false;
   if (scale !== undefined || angle !== undefined) {
+    restore = true;
+    context.save();
+    context.translate(Math.round(x - origin[0]), Math.round(y - origin[1]));
+    x = 0;
+    y = 0;
     anchor = anchor || [w / 2, h / 2];
     context.translate(anchor[0], anchor[1]);
     if (angle) {
@@ -126,11 +137,13 @@ const image = (image, x, y, sx, sy, w, h, { origin = [0, 0], anchor, scale, angl
   }
 
   if (sx !== undefined && sy !== undefined) {
-    context.drawImage(src, sx, sy, w, h, 0, 0, w, h);
+    context.drawImage(src, sx, sy, w, h, x, y, w, h);
   } else {
-    context.drawImage(src, 0, 0, w, h);
+    context.drawImage(src, x, y, w, h);
   }
-  context.restore();
+  if (restore) {
+    context.restore();
+  }
 };
 
 /**
@@ -141,7 +154,8 @@ const image = (image, x, y, sx, sy, w, h, { origin = [0, 0], anchor, scale, angl
  * @param {number|string} color - text color
  * @param {object} options - additional options
  * @param {number} options.size - text size, in px
- * @param {string} options.align - horizontal text alignment (left / center / right, default left)
+ * @param {string} options.align - horizontal text alignment
+ *  (`left` / `center` / `right`, defaults to `left`)
  * @param {string} options.font - id of the font asset to use
  */
 const text = (text, x, y, color = 0, { size = 8, align = "left", font = "itto" } = {}) => {
@@ -149,7 +163,7 @@ const text = (text, x, y, color = 0, { size = 8, align = "left", font = "itto" }
   context.font = `${size}px ${font}`;
   context.textAlign = align;
   context.fillStyle = parseColor(color);
-  context.fillText(text, Math.round(x), Math.round(y));
+  context.fillText(text, Math.floor(x), Math.floor(y));
 };
 
 export { cls, image as image, line, rect, circle, text };

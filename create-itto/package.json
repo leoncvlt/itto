@@ -1,0 +1,20 @@
+{
+  "name": "create-itto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "vite",
+    "start:desktop": "neu run",
+    "build": "vite build",
+    "build:desktop": "npm run build && neu build",
+    "install": "neu update"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@neutralinojs/neu": "^9.2.0",
+    "vite": "^2.8.6"
+  }
+}

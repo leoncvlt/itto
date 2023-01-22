@@ -16,14 +16,16 @@
     "build": "vite build ./itto",
     "start:examples": "vite ./examples --open",
     "build:examples": "vite build ./examples",
+    "build:readme": "node ./scripts/build-readme.js",
     "start:docs": "node ./scripts/build-docs.js watch",
-    "build:docs": "node ./scripts/build-docs.js build /itto"
+    "build:docs": "node ./scripts/build-docs.js build /itto",
+    "test": "jsdoc2md ./itto/core/itto.js"
   },
   "devDependencies": {
     "entoli": "^1.4.3",
-    "jsdoc-to-markdown": "^7.1.1",
-    "jsdom": "^19.0.0",
-    "marked": "^4.0.12",
-    "vite": "^2.8.0"
+    "jsdoc-to-markdown": "^8.0.0",
+    "jsdom": "^21.1.0",
+    "marked": "^4.2.12",
+    "vite": "^4.0.4"
   }
 }

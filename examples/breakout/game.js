@@ -1,4 +1,4 @@
-import { input, circle, cls, game, get, itto, text, rect, set } from "../../itto/core";
+import itto, { input, circle, cls, get, text, rect, set } from "../../itto/core";
 
 let score, top, lives;
 let started = false;
@@ -53,9 +53,9 @@ const rebuild = () => {
   }
 };
 
-game({
+itto.game({
   settings: {
-    resolution: [240, 136],
+    size: [240, 136],
     offset: [96, 64],
     supersampling: 8,
     palette: [
@@ -65,7 +65,6 @@ game({
   },
   init: () => {
     restart();
-    // itto.timescale = 0.25
   },
   update: () => {
     if (!started) {
@@ -110,8 +109,6 @@ game({
 
       for (let i = bricks.length - 1; i >= 0; i--) {
         if (collide(ball, bricks[i])) {
-          console.log(ball.x - ball.r, ball.x + ball.r, bricks[i].x, bricks[i].x + bricks[i].w);
-          console.log(itto.delta);
           if (ball.x + ball.r > bricks[i].x && ball.x - ball.r < bricks[i].x + bricks[i].w) {
             ball.dy *= -1;
           } else {
@@ -180,3 +177,5 @@ game({
     }
   },
 });
+
+console.log(itto);

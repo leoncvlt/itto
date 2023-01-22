@@ -1,4 +1,4 @@
-import { input, circle, cls, game, get, itto, text, rect, set } from "../../itto/core";
+import itto, { input, circle, cls, get, text, rect, set } from "../../itto/core";
 
 let timer = 0;
 let score, top;
@@ -51,9 +51,9 @@ const collide = (x, y) => {
   return false;
 };
 
-game({
+itto.game({
   settings: {
-    resolution: [240, 136],
+    size: [240, 136],
     supersampling: 18,
     palette: [
       0x1a1c2c, 0x5d275d, 0xb13e53, 0xef7d57, 0xffcd75, 0xa7f070, 0x38b764, 0x257179, 0x29366f,

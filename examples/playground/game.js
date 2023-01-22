@@ -1,24 +1,11 @@
-import {
-  itto,
-  game,
-  input,
-  pointer,
-  circle,
-  cls,
-  line,
-  text,
-  image,
-  sound,
-  set,
-  get,
-} from "../../itto/core";
+import itto, { input, pointer, circle, cls, line, text, image, sound } from "../../itto/core";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
 let dy = Math.sign(Math.random() - 0.5) * 2;
 const r = 8;
 
-game({
+itto.game({
   settings: {
     resolution: [240, 136],
     offset: [96, 64],
@@ -104,3 +91,5 @@ game({
     text(`Delta: ${itto.delta.toFixed(3)}`, 4, LN * 4);
   },
 });
+
+console.log(itto);

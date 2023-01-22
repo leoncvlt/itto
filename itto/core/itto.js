@@ -1,31 +1,8 @@
 import { loadAssets } from "./assets";
-
-const itto = {
-  // read-only
-  canvas: null,
-  context: null,
-  width: 0,
-  height: 0,
-  delta: 0,
-  elapsed: 0,
-  ready: false,
-  // user-writable
-  timescale: 1,
-  store: {},
-};
+import defaultSettings from "./settings";
 
 // add input events listeners
 import "./input";
-
-const proxy = new Proxy(itto, {
-  set(target, prop, val) {
-    if (!["timescale"].includes(prop)) {
-      throw new Error("game object is read-only");
-    }
-    target[prop] = val;
-    return true;
-  },
-});
 
 const preload = async () => {
   // load the deafult font (04b11) as an embedded base64 font
@@ -37,132 +14,233 @@ const preload = async () => {
   document.fonts.add(font);
 };
 
-const game = async function ({ settings, init, update, draw }) {
-  // apply the game settings on top of the default ones
-  settings = {
-    ...{
-      canvas: document.getElementById("itto"),
-      resolution: [240, 136],
-      supersampling: 8,
-      resize: "integer",
-      offset: 0,
-      assets: {},
-      palette: [],
-    },
-    ...settings,
-  };
+let _data = {};
+let _current = null;
 
-  itto.assets = settings.assets;
-  itto.palette = settings.palette;
+/**
+ * Itto object
+ */
+const itto = {
+  /**
+   * Context of the canvas element the game is being drawn in
+   * @type {CanvasContext}
+   */
+  get context() {
+    return _data[_current].context;
+  },
+  /**
+   * Width of the game area, in pixels
+   * @type {number}
+   */
+  get width() {
+    return _data[_current].width;
+  },
+  /**
+   * Height of the game area, in pixels
+   * @type {number}
+   */
+  get height() {
+    return _data[_current].height;
+  },
+  /**
+   * Delta time since last frame
+   * @type {number}
+   */
+  get delta() {
+    return _data[_current].delta;
+  },
+  /**
+   * Time elapsed since the game start, in ticks (1 second = 60 ticks)
+   * @type {number}
+   */
+  get elapsed() {
+    return _data[_current].elapsed;
+  },
+  /**
+   * Whether the game assets have finished loading or not
+   * @type {boolean}
+   */
+  get ready() {
+    return _data[_current].ready;
+  },
+  /**
+   * The array of colors
+   * @type {Array<number>}
+   */
+  get palette() {
+    return _data[_current].palette;
+  },
+  /**
+   * Initializes the game and starts the game loop
+   * @memberof itto
+   * @method game
+   * @ignore
+   * @param {Object} game
+   * @param {Settings} game.settings - an object containing the game settings
+   * @param {function} game.init - a function which runs on game start
+   * @param {function} game.update - a function which runs on every game tick
+   * @param {function} game.draw - a function which runs on every animation frame
+   */
+  game: async ({ settings, init, update, draw }) => {
+    // apply the game settings on top of the default ones
+    settings = { ...defaultSettings, ...settings };
+    const [width, height] = settings.size;
 
-  // initialize the game canvas
-  itto.canvas = document.getElementById("itto");
-  [itto.width, itto.height] = settings.resolution;
-  itto.canvas.width = itto.width;
-  itto.canvas.height = itto.height;
-  itto.canvas.style.cssText +=
-    "image-rendering: optimizeSpeed;" +
-    "image-rendering: -moz-crisp-edges;" +
-    "image-rendering: -o-crisp-edges;" +
-    "image-rendering: -webkit-crisp-edges;" +
-    "image-rendering: crisp-edges;" +
-    "image-rendering: -webkit-optimize-contrast;" +
-    "image-rendering: pixelated; " +
-    "-ms-interpolation-mode: nearest-neighbor;";
+    // generate a random uuid to associate the game's data with the canvas
+    const id = crypto.randomUUID();
 
-  const screen = itto.canvas.getContext("2d");
-  screen.imageSmoothingEnabled = false;
+    // initialize the game canvas
+    const canvas = settings.canvas;
+    canvas.dataset.itto = id;
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.cssText +=
+      "image-rendering: optimizeSpeed;" +
+      "image-rendering: -moz-crisp-edges;" +
+      "image-rendering: -o-crisp-edges;" +
+      "image-rendering: -webkit-crisp-edges;" +
+      "image-rendering: crisp-edges;" +
+      "image-rendering: -webkit-optimize-contrast;" +
+      "image-rendering: pixelated; " +
+      "-ms-interpolation-mode: nearest-neighbor;";
 
-  // initialize the double-buffer canvas
-  const buffer = document.createElement("canvas");
-  const scale = settings.supersampling * window.devicePixelRatio;
-  buffer.width = itto.width * scale;
-  buffer.height = itto.height * scale;
+    // get the canvas 2D context
+    const canvasContext = canvas.getContext("2d");
+    let context = canvasContext;
+    let supersampledCanvas;
 
-  itto.context = buffer.getContext("2d");
-  itto.context.imageSmoothingEnabled = false;
-  itto.context.scale(scale, scale);
+    // if super-sampling is enabled, create a separate scaled up canvas
+    // and set its 2D context as the active context used for drawing
+    if (settings.supersampling > 0) {
+      supersampledCanvas = document.createElement("canvas");
+      const scale = settings.supersampling * window.devicePixelRatio;
+      supersampledCanvas.width = width * scale;
+      supersampledCanvas.height = height * scale;
 
-  // the internal render function will draw the buffer onto the screen canvas
-  const render = () => {
-    screen.drawImage(buffer, 0, 0, buffer.width, buffer.height, 0, 0, itto.width, itto.height);
-  };
-
-  await preload();
-
-  // call the init function and render the first frame
-  init?.();
-  render();
-
-  let last, now, difference;
-  const target = 1000 / 60;
-  last = performance.now();
-
-  // set up the game loop to update, draw
-  const loop = () => {
-    now = performance.now();
-    difference = now - last;
-    last = now;
-
-    itto.delta = (difference / target) * itto.timescale;
-    itto.elapsed += itto.delta;
-
-    update?.();
-    draw?.();
-    render();
-    window.requestAnimationFrame(loop);
-  };
-  window.requestAnimationFrame(loop);
-
-  const resize = () => {
-    let targetWidth = itto.width;
-    let targetHeight = itto.height;
-    const parentWidth = itto.canvas.parentElement.clientWidth;
-    const parentHeight = itto.canvas.parentElement.clientHeight;
-    const offsetWidth = settings.offset[0] ?? settings.offset;
-    const offsetHeight = settings.offset[1] ?? settings.offset;
-
-    switch (settings.resize) {
-      case "integer":
-        const spareWidth = parentWidth - itto.width;
-        const spareHeight = parentHeight - itto.height;
-        if (spareWidth < 0 || spareHeight < 0) {
-          return;
-        }
-        while (
-          targetWidth + offsetWidth < spareWidth &&
-          targetHeight + offsetHeight < spareHeight
-        ) {
-          targetWidth = targetWidth + itto.width;
-          targetHeight = targetHeight + itto.height;
-        }
-        break;
-
-      case "linear":
-        const targetAspect = itto.width / itto.height;
-        const currentAspect = parentWidth / parentHeight;
-        if (targetAspect > currentAspect) {
-          targetWidth = parentWidth + offsetWidth;
-          targetHeight = targetWidth / targetAspect;
-        } else {
-          targetHeight = parentHeight + offsetHeight;
-          targetWidth = targetHeight * targetAspect;
-        }
-        break;
-
-      default:
-        return;
+      context = supersampledCanvas.getContext("2d");
+      context.scale(scale, scale);
     }
 
-    itto.canvas.style.width = `${targetWidth}px`;
-    itto.canvas.style.height = `${targetHeight}px`;
-  };
+    context.imageSmoothingEnabled = false;
 
-  window.addEventListener("resize", resize);
-  resize();
+    // set the game parameters
+    _data[id] = {
+      canvas,
+      context,
+      width,
+      height,
+      delta: 0,
+      elapsed: 0,
+      ready: false,
+      assets: settings.assets,
+      palette: settings.palette,
+      timescale: 1,
+    };
+    _current = id;
 
-  await loadAssets(settings.assets, itto.assets);
-  itto.ready = true;
+    const instance = _data[id];
+
+    // for (const key of Object.keys(_data[id]))
+    //   Object.defineProperty(itto, key, {
+    //     get() {
+    //       return _data[_current][key];
+    //     },
+    //   });
+    // console.log(itto);
+
+    await preload();
+
+    init?.();
+
+    let last, now, difference;
+    const target = 1000 / 60;
+    last = performance.now();
+
+    // set up the game loop
+    const loop = () => {
+      now = performance.now();
+      difference = now - last;
+      last = now;
+
+      instance.delta = (difference / target) * instance.timescale;
+      instance.elapsed += instance.delta;
+
+      // set the game's id as the current game being updated
+      // this allows multiple itto games to run on the same page
+      itto._current = id;
+
+      update?.();
+      draw?.();
+
+      // if supersampled canvas is being used, draw a scaled-down version of it to the original canvas.
+      // If not, all draw operations will happen on the original canvas by default.
+      if (supersampledCanvas) {
+        canvasContext.drawImage(
+          supersampledCanvas,
+          0,
+          0,
+          supersampledCanvas.width,
+          supersampledCanvas.height,
+          0,
+          0,
+          width,
+          height
+        );
+      }
+
+      window.requestAnimationFrame(loop);
+    };
+    window.requestAnimationFrame(loop);
+
+    const resize = () => {
+      const parentWidth = canvas.parentElement.clientWidth;
+      const parentHeight = canvas.parentElement.clientHeight;
+      const offsetWidth = settings.offset[0] ?? settings.offset;
+      const offsetHeight = settings.offset[1] ?? settings.offset;
+
+      switch (settings.resize) {
+        case "integer":
+          let targetWidth = width;
+          let targetHeight = height;
+          const spareWidth = parentWidth - width;
+          const spareHeight = parentHeight - height;
+          if (spareWidth < 0 || spareHeight < 0) {
+            return;
+          }
+          while (
+            targetWidth + offsetWidth < spareWidth &&
+            targetHeight + offsetHeight < spareHeight
+          ) {
+            targetWidth = targetWidth + width;
+            targetHeight = targetHeight + height;
+          }
+          canvas.style.width = `${targetWidth}px`;
+          canvas.style.height = `${targetHeight}px`;
+          break;
+
+        case "linear":
+          const targetAspect = width / height;
+          const currentAspect = parentWidth / parentHeight;
+          if (targetAspect > currentAspect) {
+            canvas.style.width = "100%";
+            canvas.style.height = "auto";
+          } else {
+            canvas.style.width = "auto";
+            canvas.style.height = "100%";
+          }
+          break;
+
+        default:
+          return;
+      }
+    };
+
+    window.addEventListener("resize", resize);
+    resize();
+
+    await loadAssets(settings.assets, instance.assets);
+    instance.ready = true;
+  },
 };
 
-export { proxy as itto, game };
+export { itto };
