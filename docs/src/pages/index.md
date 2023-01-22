@@ -1,3 +1,0 @@
-# Itto
-
-Hello World!
