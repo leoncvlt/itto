@@ -2,7 +2,8 @@ import { loadAssets } from "./assets";
 import defaultSettings from "./settings";
 
 // add input events listeners
-import "./input";
+import { register } from "./input";
+register();
 
 const preload = async () => {
   // load the deafult font (04b11) as an embedded base64 font
@@ -22,7 +23,14 @@ let _current = null;
  */
 const itto = {
   /**
-   * Context of the canvas element the game is being drawn in
+   * The canvas element the game is being drawn in
+   * @type {HTMLElement}
+   */
+  get canvas() {
+    return _data[_current].canvas;
+  },
+  /**
+   * Drawing context of the canvas element the game is being drawn in
    * @type {CanvasContext}
    */
   get context() {
@@ -69,6 +77,13 @@ const itto = {
    */
   get palette() {
     return _data[_current].palette;
+  },
+  /**
+   * The loaded assets, in a key:data format
+   * @type {object}
+   */
+  get assets() {
+    return _data[_current].assets;
   },
   /**
    * Initializes the game and starts the game loop

@@ -7,7 +7,7 @@ const r = 8;
 
 itto.game({
   settings: {
-    size: [240, 136],
+    resolution: [240, 136],
     offset: [96, 64],
     supersampling: 8,
     assets: {

@@ -22,16 +22,6 @@ const _pointer = { x: 0, y: 0 };
 
 const resetPointerButtons = () => [0, 1, 2].forEach((i) => (_inputs[i] = false));
 
-document.addEventListener("keydown", (event) => {
-  if (!event.repeat) {
-    _inputs[event.code] = itto.elapsed;
-  }
-});
-
-document.addEventListener("keyup", (event) => {
-  _inputs[event.code] = 0;
-});
-
 const handlePointerMove = (event) => {
   if (event.target === itto.canvas) {
     const { clientX } = event.touches?.length ? event.touches[0] : event;
@@ -44,24 +34,6 @@ const handlePointerMove = (event) => {
   }
 };
 
-document.addEventListener("pointermove", handlePointerMove);
-
-document.addEventListener("pointerdown", (event) => {
-  if (event.target === itto.canvas) {
-    if (!event.touches?.length > 0) {
-      _inputs[event.button] = itto.elapsed;
-    }
-  }
-});
-
-document.addEventListener("pointerup", (event) => {
-  if (event.target === itto.canvas) {
-    if (!event.touches?.length > 0) {
-      _inputs[event.button] = 0;
-    }
-  }
-});
-
 const handleTouch = (event) => {
   const touches = event.touches.length - 1;
   if (touches >= 0) {
@@ -69,20 +41,50 @@ const handleTouch = (event) => {
   }
 };
 
-document.addEventListener("touchstart", (event) => {
-  console.log(event);
-  if (event.target === itto.canvas) {
-    handleTouch(event);
-    handlePointerMove(event);
-  }
-});
+export const register = () => {
+  document.addEventListener("keydown", (event) => {
+    if (!event.repeat) {
+      _inputs[event.code] = itto.elapsed;
+    }
+  });
 
-document.addEventListener("touchend", (event) => {
-  if (event.target === itto.canvas) {
-    resetPointerButtons();
-    handleTouch(event);
-  }
-});
+  document.addEventListener("keyup", (event) => {
+    _inputs[event.code] = 0;
+  });
+
+  document.addEventListener("pointermove", handlePointerMove);
+
+  document.addEventListener("pointerdown", (event) => {
+    if (event.target === itto.canvas) {
+      if (!event.touches?.length > 0) {
+        _inputs[event.button] = itto.elapsed;
+      }
+    }
+  });
+
+  document.addEventListener("pointerup", (event) => {
+    if (event.target === itto.canvas) {
+      if (!event.touches?.length > 0) {
+        _inputs[event.button] = 0;
+      }
+    }
+  });
+
+  document.addEventListener("touchstart", (event) => {
+    console.log(event);
+    if (event.target === itto.canvas) {
+      handleTouch(event);
+      handlePointerMove(event);
+    }
+  });
+
+  document.addEventListener("touchend", (event) => {
+    if (event.target === itto.canvas) {
+      resetPointerButtons();
+      handleTouch(event);
+    }
+  });
+};
 
 /**
  * Checks if an input (keyboard / gamepad / mouse / touchscreen) is or has been pressed.
