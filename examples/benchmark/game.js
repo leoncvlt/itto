@@ -1,4 +1,8 @@
-import itto, { cls, image, text } from "../../itto/core";
+import itto, { cls, image, input, rect, text } from "../../itto/core";
+
+let rotate = true;
+let scale = true;
+let fps = 60;
 
 class Alien {
   constructor() {
@@ -7,6 +11,7 @@ class Alien {
     this.y = Math.random() * (itto.height - 24);
     this.dx = Math.random();
     this.dy = Math.random();
+    this.sz = Math.random() + 0.5;
     this.speed = (Math.random() - 0.5) * 4;
   }
 
@@ -24,8 +29,8 @@ class Alien {
 
   draw() {
     image("characters", this.x, this.y, this.type * 48, 0, 24, 24, {
-      angle: (itto.elapsed / 60) * this.speed,
-      // scale: [0.5, 0.5],
+      angle: rotate ? (itto.elapsed / 60) * this.speed : 0,
+      scale: scale ? [this.sz, this.sz] : [1, 1],
     });
   }
 }
@@ -37,7 +42,7 @@ itto.game({
     size: [640, 360],
     supersampling: 0,
     assets: {
-      characters: "/characters.png",
+      characters: "characters.png",
     },
   },
   init: () => {
@@ -51,7 +56,24 @@ itto.game({
       return;
     }
 
+    if (input("right")) {
+      for (let i = 0; i < 8; i++) aliens.push(new Alien());
+    }
+    if (input("left")) {
+      for (let i = 0; i < 8; i++) aliens.pop();
+    }
+    if (input("a", 0)) {
+      rotate = !rotate;
+    }
+    if (input("b", 0)) {
+      scale = !scale;
+    }
+
     aliens.forEach((alien) => alien.update(itto.delta));
+
+    if (itto.elapsed % 10 === 0) {
+      fps = 60 / itto.delta;
+    }
   },
 
   draw: () => {
@@ -60,11 +82,13 @@ itto.game({
       return;
     }
 
-    cls("slategrey");
+    cls(14);
 
     aliens.forEach((alien) => alien.draw(itto.delta));
 
-    text(`Aliens: ${aliens.length}`, 4, 8);
-    text(`FPS: ${Math.round(60 / itto.delta)}`, 4, 16);
+    text(`⬅️/➡️ Aliens: ${aliens.length}`, 4, 12);
+    text(`🅰 Rotate: ${scale}`, 4, 20);
+    text(`🅱️ Scale: ${rotate}`, 4, 28);
+    text(`${Math.round(fps)}`, 4, 42, 0, { size: 16 });
   },
 });

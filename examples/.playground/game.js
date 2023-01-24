@@ -9,7 +9,7 @@ itto.game({
   settings: {
     resolution: [240, 136],
     offset: [96, 64],
-    supersampling: 8,
+    supersampling: 0,
     assets: {
       characters: "/characters.png",
       jump: "/jump.wav",
@@ -59,6 +59,12 @@ itto.game({
 
     if (input("A", false)) {
       sound("jump");
+    }
+    if (input("B", false)) {
+      sound("jump", { channel: 0, loop: true });
+    }
+    if (input("x", false)) {
+      sound(null, { channel: 0 });
     }
 
     const [mx, my] = pointer();

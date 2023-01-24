@@ -57,7 +57,7 @@ itto.game({
   settings: {
     size: [240, 136],
     offset: [96, 64],
-    supersampling: 8,
+    // supersampling: 8,
     palette: [
       0x1a1c2c, 0x5d275d, 0xb13e53, 0xef7d57, 0xffcd75, 0xa7f070, 0x38b764, 0x257179, 0x29366f,
       0x3b5dc9, 0x41a6f6, 0x73eff7, 0xf4f4f4, 0x94b0c2, 0x566c86, 0x333c57,
@@ -163,6 +163,8 @@ itto.game({
 
     // draw the interface background
     rect(0, 0, itto.width, 8, 15);
+
+    text(`FPS: ${Math.round(60 / itto.delta)}`, 4, 16);
 
     if (!started) {
       // if the game has not started, draw the high score and instructions to start
