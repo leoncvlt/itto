@@ -1,10 +1,12 @@
-const { defineConfig } = require("vite");
+import { defineConfig } from "vite";
+import { viteSingleFile } from "vite-plugin-singlefile";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   root: "./src",
   base: "./",
   publicDir: "assets",
+  plugins: [viteSingleFile({ removeViteModuleLoader: true })],
   server: {
     open: true,
   },
