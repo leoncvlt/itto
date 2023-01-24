@@ -1,3 +1,4 @@
 # index.html inside each example
 # (will be symlinked by the start-example script)
 index.html
+!.template/index.html
