@@ -42,7 +42,7 @@ game.play({
     size: [640, 360],
     supersampling: 0,
     assets: {
-      characters: "/assets/characters.png",
+      characters: "../assets/characters",
     },
   },
   init: () => {
