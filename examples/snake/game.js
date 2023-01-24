@@ -62,7 +62,7 @@ game.play({
   init: () => {
     reset();
   },
-  update: () => {
+  tick: () => {
     if (!alive) {
       if (input()) {
         reset();

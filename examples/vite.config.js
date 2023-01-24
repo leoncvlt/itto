@@ -1,6 +1,6 @@
-const { resolve, join } = require("path");
+const { resolve } = require("path");
 const { defineConfig } = require("vite");
-const { readdirSync, renameSync, symlinkSync } = require("fs");
+const { readdirSync, symlinkSync, copyFileSync } = require("fs");
 
 const input = readdirSync(__dirname, { withFileTypes: true })
   .filter((dir) => dir.isDirectory())
@@ -24,8 +24,7 @@ const input = readdirSync(__dirname, { withFileTypes: true })
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  publicDir: "assets",
-  base: "/itto/",
+  base: process.env.NODE_ENV === "production" ? "/itto/" : "./",
   server: {
     host: true,
   },
@@ -39,19 +38,19 @@ export default defineConfig({
       input,
     },
   },
-  // plugins: [
-  //   {
-  //     name: "postbuild-copy-public-assets",
-  //     closeBundle: async () => {
-  //       readdirSync(resolve(__dirname, "dist"), { withFileTypes: true })
-  //         .filter((file) => file.isFile())
-  //         .forEach((file) =>
-  //           renameSync(
-  //             resolve(__dirname, `dist/${file.name}`),
-  //             resolve(__dirname, `dist/assets/${file.name}`)
-  //           )
-  //         );
-  //     },
-  //   },
-  // ],
+  plugins: [
+    {
+      name: "postbuild-copy-assets",
+      closeBundle: async () => {
+        readdirSync(resolve(__dirname, "assets"), { withFileTypes: true })
+          .filter((file) => file.isFile())
+          .forEach((file) =>
+            copyFileSync(
+              resolve(__dirname, `assets/${file.name}`),
+              resolve(__dirname, `dist/assets/${file.name}`)
+            )
+          );
+      },
+    },
+  ],
 });
