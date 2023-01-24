@@ -62,7 +62,7 @@ const itto = {
    * @type {number}
    */
   get elapsed() {
-    return _data[_current].elapsed;
+    return Math.floor(_data[_current].elapsed);
   },
   /**
    * Whether the game assets have finished loading or not
@@ -137,6 +137,7 @@ const itto = {
     }
 
     context.imageSmoothingEnabled = false;
+    context.textRendering = "geometricPrecision";
 
     // set the game parameters
     _data[id] = {
@@ -206,6 +207,13 @@ const itto = {
       window.requestAnimationFrame(loop);
     };
     window.requestAnimationFrame(loop);
+
+    document.addEventListener("visibilitychange", () => {
+      // reset the time counters when the page visibility change to avoid big delta swings
+      // when the page becomes visible again
+      now = last = performance.now();
+      difference = 0;
+    });
 
     const resize = () => {
       const parentWidth = canvas.parentElement.clientWidth;

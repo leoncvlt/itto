@@ -14,7 +14,6 @@ const testExtension = (path, extensions = []) => {
 
 const loadAsset = async (path) => {
   if (Array.isArray(path)) {
-    testE
     const assets = await Promise.all(path.map((nestedAsset) => loadAsset(nestedAsset)));
     return assets;
   }

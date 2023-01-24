@@ -1,14 +1,31 @@
-/**
- * @file Manages the configuration settings for the widget.
- * @author Rowina Sanela 
- */
-
 import { itto } from "./itto";
 
-const parseColor = (color) => {
+const tempContext = document.createElement("canvas").getContext("2d");
+
+const parseColor = (color, rgb) => {
   let value = itto.palette[color] || color;
+
+  // parses hexadecimal numbers
   if (Number.isInteger(value)) {
     value = "#" + value.toString(16).padStart(6, "0");
+  }
+
+  // parse standard css colors
+  if (!value.startsWith("#")) {
+    tempContext.fillStyle = value;
+    value = tempContext.fillStyle;
+  }
+
+  // return value
+  if (rgb) {
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    value = value.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+    const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(value);
+    return {
+      r: parseInt(rgb[1], 16),
+      g: parseInt(rgb[2], 16),
+      b: parseInt(rgb[3], 16),
+    };
   }
   return value;
 };
@@ -87,7 +104,7 @@ const circle = (x, y, r, color = 0, border = false) => {
 
 /**
  * Draws an image
- * @param {string|object} image - id of the asset or the image asset to draw
+ * @param {string} id - id of the asset of the image to draw
  * @param {number} x - x coordinate to draw the image at
  * @param {number} y - y coordinate to draw the image at
  * @param {number} sx - top-left x coordinate of the portion of the source image to draw
@@ -103,9 +120,9 @@ const circle = (x, y, r, color = 0, border = false) => {
  * @param {number[]} options.scale - `[x, y]` tuple of the scale factor values
  * @param {number} options.angle - angle to rotate the image by
  */
-const image = (image, x, y, sx, sy, w, h, { origin = [0, 0], anchor, scale, angle } = {}) => {
+const image = (id, x, y, sx, sy, w, h, { origin = [0, 0], anchor, scale, angle } = {}) => {
   const { context, assets } = itto;
-  const src = typeof image === "string" ? assets[image] : image;
+  const src = assets[id];
   if (!(src instanceof Image)) {
     console.warn("Attempting to draw an invalid image");
     return;
@@ -118,6 +135,8 @@ const image = (image, x, y, sx, sy, w, h, { origin = [0, 0], anchor, scale, angl
     h = src.height;
   }
 
+  //TODO: implement using setTransform (should be faster)
+  // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
   let restore = false;
   if (scale !== undefined || angle !== undefined) {
     restore = true;

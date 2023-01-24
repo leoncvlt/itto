@@ -47,6 +47,6 @@ const parseReadme = async (file) => {
   return content;
 };
 
-parseReadme(path.join(process.cwd(), "docs", "README.md")).then((content) =>
+parseReadme(path.join(process.cwd(), "docs", "README.draft.md")).then((content) =>
   fs.writeFileSync("README.md", content)
 );

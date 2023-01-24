@@ -2,40 +2,53 @@
 
 An itty bitty javascript game engine
 
+## ⬇️ Install & Usage
+
+### Global Object
+
+`<script src="path/to/itto.js"></script>`
+
+`const { play, game } = itto`
+
+### Bundler
+
+`npm i itto`
+
+`import { play, game } from "itto"`
+
 ## 🚀 Quick start
 
-Import the default `itto` object, and call `itto.game` to initialize the game loop. The function takes 4 named parameters:
-| | | |
-| --- | --- | --- |
-| settings | <code>object</code> |  an object containing the game settings. See [game settings](#game-settings) |
-| init | <code>function</code> |  function which runs once, on game start |
-| update | <code>function</code> |  a function which runs on every game tick (by default, game runs at 60 ticks per second) |
-| render | <code>function</code> |  a function which runs on every animation frame (always tries to target 60 frames per second) |
+Import and call the `game` function to initialize the game loop. The function takes on object with 4 named parameters:
+
+* `settings` - an `object` containing the game settings. See [game settings](#game-settings)
+* `init` - a `function` which runs once, on game start
+* `tick` - a `function` which runs on every game tick (by default, game runs at 60 ticks per second)
+* `draw` - a `function` which runs on every animation frame (always tries to target 60 frames per second)
 
 ```js
-import itto, { cls, circle } from "itto";
+import { play, game, cls, circle } from "itto";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
 let dy = Math.sign(Math.random() - 0.5) * 2;
 const r = 8;
 
-itto.game({
+play({
   settings: {
     size: [360, 96],
   },
   init: () => {
-    x = itto.width / 2;
-    y = itto.height / 2;
+    x = game.width / 2;
+    y = game.height / 2;
   },
-  update: () => {
-    x = x + dx * itto.delta;
-    y = y + dy * itto.delta;
+  tick: () => {
+    x = x + dx * game.delta;
+    y = y + dy * game.delta;
 
-    if (x > itto.width - r / 2 || x < 0) {
+    if (x > game.width - r / 2 || x < 0) {
       dx = -dx;
     }
-    if (y > itto.height - r / 2 || y < 0) {
+    if (y > game.height - r / 2 || y < 0) {
       dy = -dy;
     }
   },
@@ -52,13 +65,13 @@ TODO
 
 ## ⚙️ Game settings
 
-The following properties can be passed to the `settings` parameter of the `.game` function:
+The following properties can be passed to the `settings` parameter of the `game` function:
 
 {[itto/core/settings.js:7]}
 
 ## 🧩 Game properties
 
-Inside the `init`, `update` or `render` functions you can access several properties of the `itto` object to query information about the game currently running:
+Import the `game` object to query information about the game currently running from inside the `init`, `tick` or `draw` methods:
 
 {[itto/core/itto.js:6]}
 

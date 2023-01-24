@@ -9,7 +9,7 @@ const settings = {
   canvas: document.querySelector("canvas"),
   size: [240, 136],
   resize: "integer",
-  supersampling: 8,
+  supersampling: 0,
   offset: 0,
   assets: {},
   palette: [

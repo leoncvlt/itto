@@ -13,6 +13,8 @@ const KEYMAP = {
   right: "ArrowRight",
   a: "KeyZ",
   b: "KeyX",
+  c: "KeyA",
+  d: "KeyS",
   x: "KeyA",
   y: "KeyS",
 };
