@@ -17,6 +17,7 @@ const preload = async () => {
 
 let _data = {};
 let _current = null;
+let instances = 0;
 
 /**
  * Itto object
@@ -102,7 +103,8 @@ const itto = {
     const [width, height] = settings.size;
 
     // generate a random uuid to associate the game's data with the canvas
-    const id = crypto.randomUUID();
+    const id = instances;
+    instances++;
 
     // initialize the game canvas
     const canvas = settings.canvas;
