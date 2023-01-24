@@ -24,7 +24,7 @@ const input = readdirSync(__dirname, { withFileTypes: true })
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "./",
+  base: process.env.NODE_ENV === "production" ? "/itto/" : "./",
   server: {
     host: true,
   },

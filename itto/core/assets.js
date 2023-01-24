@@ -28,6 +28,8 @@ const loadAsset = async (path) => {
     const arrayBuffer = await response.arrayBuffer();
     const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
     return audioBuffer;
+  } else {
+    console.warn(`Unsure how to load asset ${path}`);
   }
 };
 
