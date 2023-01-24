@@ -1,6 +1,6 @@
 const { resolve, join } = require("path");
 const { defineConfig } = require("vite");
-const { readdirSync, renameSync, symlinkSync } = require("fs");
+const { readdirSync, renameSync, copyFileSync } = require("fs");
 
 const input = readdirSync(__dirname, { withFileTypes: true })
   .filter((dir) => dir.isDirectory())
@@ -25,7 +25,7 @@ const input = readdirSync(__dirname, { withFileTypes: true })
 // https://vitejs.dev/config/
 export default defineConfig({
   publicDir: "assets",
-  base: "/",
+  base: "/itto/",
   server: {
     host: true,
   },
