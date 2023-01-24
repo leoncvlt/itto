@@ -1,6 +1,6 @@
-import itto, { cls, rect, text } from "../../itto/core";
+import { game, cls, rect, text } from "../../itto/core";
 
-itto.game({
+game.play({
   settings: {
     width: 120,
     height: 120,
@@ -9,14 +9,14 @@ itto.game({
   },
   draw() {
     cls(0);
-    text("Hello ITTO 1!", itto.width / 2, 8, 1, { align: "center" });
+    text("Hello ITTO 1!", game.width / 2, 8, 1, { align: "center" });
     for (let i = 0; i < 4; i++) {
-      rect(itto.width / 2 - 16 + Math.sin(itto.elapsed / 16) * 16, itto.height / 2 - 16, 32, 32, 2);
+      rect(game.width / 2 - 16 + Math.sin(game.elapsed / 16) * 16, game.height / 2 - 16, 32, 32, 2);
     }
   },
 });
 
-itto.game({
+game.play({
   settings: {
     width: 120,
     height: 150,
@@ -25,14 +25,14 @@ itto.game({
   },
   draw() {
     cls(0);
-    text("Hello ITTO 2!", itto.width / 2, 8, 1, { align: "center" });
+    text("Hello ITTO 2!", game.width / 2, 8, 1, { align: "center" });
     for (let i = 0; i < 4; i++) {
-      rect(itto.width / 2 - 16, itto.height / 2 - 16 + Math.sin(itto.elapsed / 16) * 16, 32, 32, 2);
+      rect(game.width / 2 - 16, game.height / 2 - 16 + Math.sin(game.elapsed / 16) * 16, 32, 32, 2);
     }
   },
 });
 
-itto.game({
+game.play({
   settings: {
     width: 120,
     height: 180,
@@ -44,11 +44,11 @@ itto.game({
   },
   draw() {
     cls(0);
-    text("Hello ITTO 3!", itto.width / 2, 8, 1, { align: "center" });
+    text("Hello ITTO 3!", game.width / 2, 8, 1, { align: "center" });
     for (let i = 0; i < 4; i++) {
       rect(
-        itto.width / 2 - 16 + Math.cos(itto.elapsed / 16) * 16,
-        itto.height / 2 - 16 + Math.sin(itto.elapsed / 16) * 32,
+        game.width / 2 - 16 + Math.cos(game.elapsed / 16) * 16,
+        game.height / 2 - 16 + Math.sin(game.elapsed / 16) * 32,
         32,
         32,
         2

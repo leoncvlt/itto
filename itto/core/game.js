@@ -20,9 +20,9 @@ let _current = null;
 let instances = 0;
 
 /**
- * Itto object
+ * The game object
  */
-const itto = {
+const game = {
   /**
    * The canvas element the game is being drawn in
    * @type {HTMLElement}
@@ -88,16 +88,16 @@ const itto = {
   },
   /**
    * Initializes the game and starts the game loop
-   * @memberof itto
-   * @method game
+   * @memberof game
+   * @method play
    * @ignore
    * @param {Object} game
    * @param {Settings} game.settings - an object containing the game settings
    * @param {function} game.init - a function which runs on game start
-   * @param {function} game.update - a function which runs on every game tick
+   * @param {function} game.tick - a function which runs on every game tick
    * @param {function} game.draw - a function which runs on every animation frame
    */
-  game: async ({ settings, init, update, draw }) => {
+  play: async ({ settings, init, tick, draw }) => {
     // apply the game settings on top of the default ones
     settings = { ...defaultSettings, ...settings };
     const [width, height] = settings.size;
@@ -158,14 +158,6 @@ const itto = {
 
     const instance = _data[id];
 
-    // for (const key of Object.keys(_data[id]))
-    //   Object.defineProperty(itto, key, {
-    //     get() {
-    //       return _data[_current][key];
-    //     },
-    //   });
-    // console.log(itto);
-
     await preload();
 
     init?.();
@@ -185,9 +177,9 @@ const itto = {
 
       // set the game's id as the current game being updated
       // this allows multiple itto games to run on the same page
-      itto._current = id;
+      game._current = id;
 
-      update?.();
+      tick?.();
       draw?.();
 
       // if supersampled canvas is being used, draw a scaled-down version of it to the original canvas.
@@ -268,4 +260,4 @@ const itto = {
   },
 };
 
-export { itto };
+export { game };

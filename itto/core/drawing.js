@@ -1,9 +1,9 @@
-import { itto } from "./itto";
+import { game } from "./game";
 
 const tempContext = document.createElement("canvas").getContext("2d");
 
 const parseColor = (color, rgb) => {
-  let value = itto.palette[color] || color;
+  let value = game.palette[color] || color;
 
   // parses hexadecimal numbers
   if (Number.isInteger(value)) {
@@ -35,7 +35,7 @@ const parseColor = (color, rgb) => {
  * @param {number|string} color - the color to fill the screen with. Omit to use a transparent color
  */
 const cls = (color) => {
-  const { context, width, height } = itto;
+  const { context, width, height } = game;
   if (color !== null) {
     context.fillStyle = parseColor(color);
     context.fillRect(0, 0, width, height);
@@ -53,7 +53,7 @@ const cls = (color) => {
  * @param {number|string} color - the line color
  */
 const line = (x0, y0, x1, y1, color = 0) => {
-  const { context } = itto;
+  const { context } = game;
   context.strokeStyle = parseColor(color);
   context.beginPath();
   context.moveTo(Math.round(x0), Math.round(y0));
@@ -71,7 +71,7 @@ const line = (x0, y0, x1, y1, color = 0) => {
  * @param {boolean} border - whether to draw the border only or a filled shape
  */
 const rect = (x, y, w, h, color = 0, border = false) => {
-  const { context } = itto;
+  const { context } = game;
   context.save();
   if (!border) {
     context.fillStyle = parseColor(color);
@@ -91,7 +91,7 @@ const rect = (x, y, w, h, color = 0, border = false) => {
  * @param {boolean} border - whether to draw the border only or a filled shape
  */
 const circle = (x, y, r, color = 0, border = false) => {
-  const { context } = itto;
+  const { context } = game;
   context.beginPath();
   context.arc(Math.round(x), Math.round(y), r - 0.5, 0, Math.PI * 2);
   if (!border) {
@@ -121,7 +121,7 @@ const circle = (x, y, r, color = 0, border = false) => {
  * @param {number} options.angle - angle to rotate the image by
  */
 const image = (id, x, y, sx, sy, w, h, { origin = [0, 0], anchor, scale, angle } = {}) => {
-  const { context, assets } = itto;
+  const { context, assets } = game;
   const src = assets[id];
   if (!(src instanceof Image)) {
     console.warn("Attempting to draw an invalid image");
@@ -178,11 +178,11 @@ const image = (id, x, y, sx, sy, w, h, { origin = [0, 0], anchor, scale, angle }
  * @param {string} options.font - id of the font asset to use
  */
 const text = (text, x, y, color = 0, { size = 8, align = "left", font = "itto" } = {}) => {
-  const { context } = itto;
+  const { context } = game;
   context.font = `${size}px ${font}`;
   context.textAlign = align;
   context.fillStyle = parseColor(color);
   context.fillText(text, Math.floor(x), Math.floor(y));
 };
 
-export { cls, image as image, line, rect, circle, text };
+export { cls, image, line, rect, circle, text };

@@ -1,4 +1,4 @@
-import { itto } from "./itto";
+import { game } from "./game";
 
 const KEYMAP = {
   mouse: 0,
@@ -25,10 +25,10 @@ const _pointer = { x: 0, y: 0 };
 const resetPointerButtons = () => [0, 1, 2].forEach((i) => (_inputs[i] = false));
 
 const handlePointerMove = (event) => {
-  if (event.target === itto.canvas) {
+  if (event.target === game.canvas) {
     const { clientX } = event.touches?.length ? event.touches[0] : event;
     const { clientY } = event.touches?.length ? event.touches[0] : event;
-    const { clientWidth, clientHeight, offsetLeft, offsetTop, width, height } = itto.canvas;
+    const { clientWidth, clientHeight, offsetLeft, offsetTop, width, height } = game.canvas;
     _pointer.x = parseInt(((clientX - offsetLeft) / clientWidth) * width);
     _pointer.y = parseInt(((clientY - offsetTop) / clientHeight) * height);
   } else {
@@ -39,14 +39,14 @@ const handlePointerMove = (event) => {
 const handleTouch = (event) => {
   const touches = event.touches.length - 1;
   if (touches >= 0) {
-    _inputs[event.touches.length - 1] = itto.elapsed;
+    _inputs[event.touches.length - 1] = game.elapsed;
   }
 };
 
 export const register = () => {
   document.addEventListener("keydown", (event) => {
     if (!event.repeat) {
-      _inputs[event.code] = itto.elapsed;
+      _inputs[event.code] = game.elapsed;
     }
   });
 
@@ -57,15 +57,15 @@ export const register = () => {
   document.addEventListener("pointermove", handlePointerMove);
 
   document.addEventListener("pointerdown", (event) => {
-    if (event.target === itto.canvas) {
+    if (event.target === game.canvas) {
       if (!event.touches?.length > 0) {
-        _inputs[event.button] = itto.elapsed;
+        _inputs[event.button] = game.elapsed;
       }
     }
   });
 
   document.addEventListener("pointerup", (event) => {
-    if (event.target === itto.canvas) {
+    if (event.target === game.canvas) {
       if (!event.touches?.length > 0) {
         _inputs[event.button] = 0;
       }
@@ -74,14 +74,14 @@ export const register = () => {
 
   document.addEventListener("touchstart", (event) => {
     console.log(event);
-    if (event.target === itto.canvas) {
+    if (event.target === game.canvas) {
       handleTouch(event);
       handlePointerMove(event);
     }
   });
 
   document.addEventListener("touchend", (event) => {
-    if (event.target === itto.canvas) {
+    if (event.target === game.canvas) {
       resetPointerButtons();
       handleTouch(event);
     }
@@ -108,10 +108,10 @@ const input = (id, period = 1) => {
   }
   const input = KEYMAP[id.toString().toLowerCase()];
   if (_inputs[input]) {
-    const delta = itto.elapsed - _inputs[input];
+    const delta = game.elapsed - _inputs[input];
     const triggered = !!period ? delta === 0 || delta > period : true;
     if (triggered) {
-      _inputs[input] = period ? _inputs[input] + period * itto.delta : 0;
+      _inputs[input] = period ? _inputs[input] + period * game.delta : 0;
       return true;
     }
   }

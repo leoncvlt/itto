@@ -1,4 +1,4 @@
-import { itto } from "./itto";
+import { game } from "./game";
 
 export const audioContext = new AudioContext();
 const channels = [];
@@ -19,7 +19,7 @@ export const sound = (id, { channel, volume = 1.0, loop = false } = {}) => {
     channels[channel].stop();
     delete channels[channel];
   }
-  const src = itto.assets[id];
+  const src = game.assets[id];
   if (src instanceof AudioBuffer) {
     const source = audioContext.createBufferSource();
     source.buffer = src;

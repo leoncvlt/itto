@@ -8,17 +8,23 @@ An itty bitty javascript game engine
 
 `<script src="path/to/itto.js"></script>`
 
-`const { play, game } = itto`
+`const { game } = itto`
+
+### ES Module
+
+`<script type="module" src="path/to/itto.mjs"></script>`
+
+`import { game } from "itto"`
 
 ### Bundler
 
 `npm i itto`
 
-`import { play, game } from "itto"`
+`import { game } from "itto"`
 
 ## 🚀 Quick start
 
-Import and call the `game` function to initialize the game loop. The function takes on object with 4 named parameters:
+Call `game.play` to initialize the game loop. The function takes on object with 4 named parameters:
 
 * `settings` - an `object` containing the game settings. See [game settings](#game-settings)
 * `init` - a `function` which runs once, on game start
@@ -26,14 +32,14 @@ Import and call the `game` function to initialize the game loop. The function ta
 * `draw` - a `function` which runs on every animation frame (always tries to target 60 frames per second)
 
 ```js
-import { play, game, cls, circle } from "itto";
+import { game, cls, circle } from "itto";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
 let dy = Math.sign(Math.random() - 0.5) * 2;
 const r = 8;
 
-play({
+game.play({
   settings: {
     size: [360, 96],
   },
@@ -61,27 +67,27 @@ play({
 
 ## 💾 Examples
 
-TODO
+`🚧 TODO`
 
 ## ⚙️ Game settings
 
-The following properties can be passed to the `settings` parameter of the `game` function:
+The following properties can be passed to the `settings` parameter of the `game.play` function:
 
 {[itto/core/settings.js:7]}
 
 ## 🧩 Game properties
 
-Import the `game` object to query information about the game currently running from inside the `init`, `tick` or `draw` methods:
+Inside `init`, `tick` or `draw` methods you can query different parameters from the `game` object to get specific properties of the game currently running:
 
-{[itto/core/itto.js:6]}
+{[itto/core/game.js:6]}
 
 ## 📦 Loading assets
 
-TODO
+`🚧 TODO`
 
 ## ✨ Functions
 
-`itto` offers a barebone set of functions to build your game with. All methods are named imports from the "itto" namespace.
+The library offers a barebone set of functions to build your game with. All methods are named imports from the `"itto"` namespace.
 
 ### 🎨 Drawing 
 

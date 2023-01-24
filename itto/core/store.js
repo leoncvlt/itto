@@ -1,5 +1,5 @@
 export const set = (key, value) => {
-  if (value === undefined) {
+  if (value == undefined) {
     localStorage.removeItem(key);
   } else {
     localStorage.setItem(key, JSON.stringify(value));

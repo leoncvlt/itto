@@ -2,40 +2,59 @@
 
 An itty bitty javascript game engine
 
+## ⬇️ Install & Usage
+
+### Global Object
+
+`<script src="path/to/itto.js"></script>`
+
+`const { game } = itto`
+
+### ES Module
+
+`<script type="module" src="path/to/itto.mjs"></script>`
+
+`import { game } from "itto"`
+
+### Bundler
+
+`npm i itto`
+
+`import { game } from "itto"`
+
 ## 🚀 Quick start
 
-Import the default `itto` object, and call `itto.game` to initialize the game loop. The function takes 4 named parameters:
-| | | |
-| --- | --- | --- |
-| settings | <code>object</code> |  an object containing the game settings. See [game settings](#game-settings) |
-| init | <code>function</code> |  function which runs once, on game start |
-| update | <code>function</code> |  a function which runs on every game tick (by default, game runs at 60 ticks per second) |
-| render | <code>function</code> |  a function which runs on every animation frame (always tries to target 60 frames per second) |
+Call `game.play` to initialize the game loop. The function takes on object with 4 named parameters:
+
+* `settings` - an `object` containing the game settings. See [game settings](#game-settings)
+* `init` - a `function` which runs once, on game start
+* `tick` - a `function` which runs on every game tick (by default, game runs at 60 ticks per second)
+* `draw` - a `function` which runs on every animation frame (always tries to target 60 frames per second)
 
 ```js
-import itto, { cls, circle } from "itto";
+import { game, cls, circle } from "itto";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
 let dy = Math.sign(Math.random() - 0.5) * 2;
 const r = 8;
 
-itto.game({
+game.play({
   settings: {
     size: [360, 96],
   },
   init: () => {
-    x = itto.width / 2;
-    y = itto.height / 2;
+    x = game.width / 2;
+    y = game.height / 2;
   },
-  update: () => {
-    x = x + dx * itto.delta;
-    y = y + dy * itto.delta;
+  tick: () => {
+    x = x + dx * game.delta;
+    y = y + dy * game.delta;
 
-    if (x > itto.width - r / 2 || x < 0) {
+    if (x > game.width - r / 2 || x < 0) {
       dx = -dx;
     }
-    if (y > itto.height - r / 2 || y < 0) {
+    if (y > game.height - r / 2 || y < 0) {
       dy = -dy;
     }
   },
@@ -48,11 +67,11 @@ itto.game({
 
 ## 💾 Examples
 
-TODO
+`🚧 TODO`
 
 ## ⚙️ Game settings
 
-The following properties can be passed to the `settings` parameter of the `.game` function:
+The following properties can be passed to the `settings` parameter of the `game.play` function:
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -63,61 +82,73 @@ The following properties can be passed to the `settings` parameter of the `.game
 
 ## 🧩 Game properties
 
-Inside the `init`, `update` or `render` functions you can access several properties of the `itto` object to query information about the game currently running:
+Inside `init`, `tick` or `draw` methods you can query different parameters from the `game` object to get specific properties of the game currently running:
 
-* [`itto`](#itto)
-    * [`.context`](#itto.context) : <code>CanvasContext</code>
-    * [`.width`](#itto.width) : <code>number</code>
-    * [`.height`](#itto.height) : <code>number</code>
-    * [`.delta`](#itto.delta) : <code>number</code>
-    * [`.elapsed`](#itto.elapsed) : <code>number</code>
-    * [`.ready`](#itto.ready) : <code>boolean</code>
-    * [`.palette`](#itto.palette) : <code>Array.&lt;number&gt;</code>
+* [`game`](#game)
+    * [`.canvas`](#game.canvas) : <code>HTMLElement</code>
+    * [`.context`](#game.context) : <code>CanvasContext</code>
+    * [`.width`](#game.width) : <code>number</code>
+    * [`.height`](#game.height) : <code>number</code>
+    * [`.delta`](#game.delta) : <code>number</code>
+    * [`.elapsed`](#game.elapsed) : <code>number</code>
+    * [`.ready`](#game.ready) : <code>boolean</code>
+    * [`.palette`](#game.palette) : <code>Array.&lt;number&gt;</code>
+    * [`.assets`](#game.assets) : <code>object</code>
 
-<a name="itto.context"></a>
+<a name="game.canvas"></a>
 
-#### `itto.context` : <code>CanvasContext</code>
-Context of the canvas element the game is being drawn in
+#### `game.canvas` : <code>HTMLElement</code>
+The canvas element the game is being drawn in
 
-<a name="itto.width"></a>
+<a name="game.context"></a>
 
-#### `itto.width` : <code>number</code>
+#### `game.context` : <code>CanvasContext</code>
+Drawing context of the canvas element the game is being drawn in
+
+<a name="game.width"></a>
+
+#### `game.width` : <code>number</code>
 Width of the game area, in pixels
 
-<a name="itto.height"></a>
+<a name="game.height"></a>
 
-#### `itto.height` : <code>number</code>
+#### `game.height` : <code>number</code>
 Height of the game area, in pixels
 
-<a name="itto.delta"></a>
+<a name="game.delta"></a>
 
-#### `itto.delta` : <code>number</code>
+#### `game.delta` : <code>number</code>
 Delta time since last frame
 
-<a name="itto.elapsed"></a>
+<a name="game.elapsed"></a>
 
-#### `itto.elapsed` : <code>number</code>
+#### `game.elapsed` : <code>number</code>
 Time elapsed since the game start, in ticks (1 second = 60 ticks)
 
-<a name="itto.ready"></a>
+<a name="game.ready"></a>
 
-#### `itto.ready` : <code>boolean</code>
+#### `game.ready` : <code>boolean</code>
 Whether the game assets have finished loading or not
 
-<a name="itto.palette"></a>
+<a name="game.palette"></a>
 
-#### `itto.palette` : <code>Array.&lt;number&gt;</code>
+#### `game.palette` : <code>Array.&lt;number&gt;</code>
 The array of colors
+
+<a name="game.assets"></a>
+
+#### `game.assets` : <code>object</code>
+The loaded assets, in a key:data format
 
 
 
 ## 📦 Loading assets
 
-TODO
+`🚧 TODO`
 
 ## ✨ Functions
 
-`itto` offers a barebone set of functions to build your game with. All methods are named imports from the "itto" namespace.
+The library offers a barebone set of functions to build your game with. All methods are named imports from the `"itto"` namespace.
 
 ### 🎨 Drawing 
 
@@ -134,7 +165,7 @@ TODO
 <dt><a href="#circle">`circle(x, y, r, color, border)`</a></dt>
 <dd><p>Draws a circle</p>
 </dd>
-<dt><a href="#image">`image(image, x, y, sx, sy, w, h, options)`</a></dt>
+<dt><a href="#image">`image(id, x, y, sx, sy, w, h, options)`</a></dt>
 <dd><p>Draws an image</p>
 </dd>
 <dt><a href="#text">`text(text, x, y, color, options)`</a></dt>
@@ -197,13 +228,13 @@ Draws a circle
 
 <a name="image"></a>
 
-### `image(image, x, y, sx, sy, w, h, options)`
+### `image(id, x, y, sx, sy, w, h, options)`
 Draws an image
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| image | <code>string</code> \| <code>object</code> | id of the asset or the image asset to draw |
+| id | <code>string</code> | id of the asset of the image to draw |
 | x | <code>number</code> | x coordinate to draw the image at |
 | y | <code>number</code> | y coordinate to draw the image at |
 | sx | <code>number</code> | top-left x coordinate of the portion of the source image to draw |
@@ -293,4 +324,16 @@ Checks the current pointer position
 
 
 ### 🔊 Sound
+
+### `sound`
+Plays a sound
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>string</code> | id of the asset of the sound file to play |
+| options | <code>object</code> | additional options |
+| options.channel | <code>number</code> | the channel to play the sound in.  Playing a sound in a specific channel stops other sounds playing in that same channel.  Call this method with a `null` src and a channel to stop the sound playing in that channel. |
+| options.volume | <code>number</code> | volume to play the sound at |
+| options.loop | <code>boolean</code> | whether to loop the sound or not |
 

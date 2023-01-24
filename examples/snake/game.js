@@ -1,4 +1,4 @@
-import itto, { input, circle, cls, get, text, rect, set } from "../../itto/core";
+import { game, input, circle, cls, get, text, rect, set } from "../../itto/core";
 
 let timer = 0;
 let score, top;
@@ -12,8 +12,8 @@ const reset = () => {
   score = 0;
   top = get("highscore", 0);
   Object.assign(snake, {
-    x: itto.width / 2,
-    y: itto.height / 2 - 4,
+    x: game.width / 2,
+    y: game.height / 2 - 4,
     cx: 0,
     cy: 0,
     dx: 0,
@@ -30,8 +30,8 @@ const reset = () => {
 const spawn = () => {
   let x, y;
   while (!x || !y || collide(x, y)) {
-    x = Math.floor(Math.random() * (itto.width / 8)) * 8;
-    y = Math.floor(Math.random() * (itto.height / 8)) * 8;
+    x = Math.floor(Math.random() * (game.width / 8)) * 8;
+    y = Math.floor(Math.random() * (game.height / 8)) * 8;
   }
   food.x = x;
   food.y = y;
@@ -51,7 +51,7 @@ const collide = (x, y) => {
   return false;
 };
 
-itto.game({
+game.play({
   settings: {
     size: [240, 136],
     palette: [
@@ -91,24 +91,24 @@ itto.game({
       }
     }
 
-    if (snake.x > itto.width) {
+    if (snake.x > game.width) {
       snake.x = 0;
     }
     if (snake.x < 0) {
-      snake.x = itto.width - 8;
+      snake.x = game.width - 8;
     }
-    if (snake.y > itto.height - 8) {
+    if (snake.y > game.height - 8) {
       snake.y = 8;
     }
     if (snake.y < 8) {
-      snake.y = itto.height - 8;
+      snake.y = game.height - 8;
     }
 
     if (!snake.dx && !snake.dy) {
       return;
     }
 
-    timer += itto.delta;
+    timer += game.delta;
     if (timer > 60 / snake.speed) {
       for (let i = snake.body.length - 1; i >= 0; i--) {
         const body = snake.body[i];
@@ -153,8 +153,8 @@ itto.game({
 
     circle(food.x + 4, food.y + 4, 4, 2);
 
-    rect(0, 0, itto.width, 8, 15);
+    rect(0, 0, game.width, 8, 15);
     text(`SCORE ${score.toString().padStart(3, "0")}`, 2, 7, 14);
-    text(`TOP ${top.toString().padStart(3, "0")}`, itto.width - 1, 7, 14, { align: "right" });
+    text(`TOP ${top.toString().padStart(3, "0")}`, game.width - 1, 7, 14, { align: "right" });
   },
 });

@@ -1,4 +1,4 @@
-import itto, { cls, image, input, rect, text } from "../../itto/core";
+import { game, cls, image, input, text } from "../../itto/core";
 
 let rotate = true;
 let scale = true;
@@ -7,8 +7,8 @@ let fps = 60;
 class Alien {
   constructor() {
     this.type = Math.floor(Math.random() * 4);
-    this.x = Math.random() * (itto.width - 24);
-    this.y = Math.random() * (itto.height - 24);
+    this.x = Math.random() * (game.width - 24);
+    this.y = Math.random() * (game.height - 24);
     this.dx = Math.random();
     this.dy = Math.random();
     this.sz = Math.random() + 0.5;
@@ -19,17 +19,17 @@ class Alien {
     this.x = this.x + this.dx * (this.speed * delta);
     this.y = this.y + this.dy * (this.speed * delta);
 
-    if (this.x > itto.width - 24 || this.x < 0) {
+    if (this.x > game.width - 24 || this.x < 0) {
       this.dx = -this.dx;
     }
-    if (this.y > itto.height - 24 || this.y < 0) {
+    if (this.y > game.height - 24 || this.y < 0) {
       this.dy = -this.dy;
     }
   }
 
   draw() {
     image("characters", this.x, this.y, this.type * 48, 0, 24, 24, {
-      angle: rotate ? (itto.elapsed / 60) * this.speed : 0,
+      angle: rotate ? (game.elapsed / 60) * this.speed : 0,
       scale: scale ? [this.sz, this.sz] : [1, 1],
     });
   }
@@ -37,7 +37,7 @@ class Alien {
 
 const aliens = [];
 
-itto.game({
+game.play({
   settings: {
     size: [640, 360],
     supersampling: 0,
@@ -51,8 +51,8 @@ itto.game({
     }
   },
 
-  update: () => {
-    if (!itto.ready) {
+  tick: () => {
+    if (!game.ready) {
       return;
     }
 
@@ -69,22 +69,22 @@ itto.game({
       scale = !scale;
     }
 
-    aliens.forEach((alien) => alien.update(itto.delta));
+    aliens.forEach((alien) => alien.update(game.delta));
 
-    if (itto.elapsed % 10 === 0) {
-      fps = 60 / itto.delta;
+    if (game.elapsed % 10 === 0) {
+      fps = 60 / game.delta;
     }
   },
 
   draw: () => {
-    if (!itto.ready) {
+    if (!game.ready) {
       cls(0);
       return;
     }
 
     cls(14);
 
-    aliens.forEach((alien) => alien.draw(itto.delta));
+    aliens.forEach((alien) => alien.draw(game.delta));
 
     text(`⬅️/➡️ Aliens: ${aliens.length}`, 4, 12);
     text(`🅰 Rotate: ${scale}`, 4, 20);
