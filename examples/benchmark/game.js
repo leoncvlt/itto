@@ -42,7 +42,7 @@ itto.game({
     size: [640, 360],
     supersampling: 0,
     assets: {
-      characters: "characters.png",
+      characters: "/characters.png",
     },
   },
   init: () => {
