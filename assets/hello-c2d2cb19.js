@@ -1,1 +1,0 @@
-import{g as s,c as o,t as l}from"./drawing-c070374e.js";const a="HELLO ITTO!",e=8,n=4,c=.1,h=8;s.play({draw(){o(0);for(let t=0;t<a.length;t++)l(a[t],s.width/2+t*e-a.length*e/2,s.height/2+Math.sin((s.elapsed-t*n)*c)*h,(t+Math.floor(s.elapsed*.1))%15+1)}});
