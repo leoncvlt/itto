@@ -2,14 +2,13 @@
   "name": "itto",
   "private": true,
   "version": "0.0.0",
-  "main": "./dist/itto.core.js.js",
-  "module": "./dist/itto.core.js.js",
+  "main": "./itto/dist/itto.mjs",
+  "module": "./itto/dist/itto.mjs",
   "files": [
-    "dist"
+    "./itto/dist"
   ],
   "exports": {
-    ".": "./dist/itto.core.js",
-    "./utils": "./dist/itto.utils.js"
+    ".": "./itto/dist/itto.mjs"
   },
   "scripts": {
     "start": "node ./scripts/start-example.js",

@@ -1,5 +1,6 @@
 const { resolve } = require("path");
 const { defineConfig } = require("vite");
+const { transform } = require("esbuild");
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,16 +10,20 @@ export default defineConfig({
     lib: {
       name: "itto",
       entry: resolve(__dirname, "core/index.js"),
-      formats: ["es"],
+      formats: ["es", "iife"],
+      fileName: (format) =>
+        ({
+          es: `itto.mjs`,
+          iife: `itto.js`,
+        }[format]),
     },
     rollupOptions: {
       input: {
         core: resolve(__dirname, "core/index.js"),
-        utils: resolve(__dirname, "utils/index.js"),
       },
       output: {
         // preserveModules: true,
-        entryFileNames: ({ name: fileName }) => `itto.${fileName}.js`,
+        // entryFileNames: ({ name: fileName }) => `itto.${fileName}.js`,
       },
     },
   },
