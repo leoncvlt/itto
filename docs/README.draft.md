@@ -6,13 +6,13 @@ An itty bitty javascript game engine
 
 ### Global Object
 
-`<script src="path/to/itto.js"></script>`
+`<script src="https://unpkg.com/itto/itto.js"></script>`
 
 `const { game } = itto`
 
 ### ES Module
 
-`<script type="module" src="path/to/itto.mjs"></script>`
+`<script type="module" src="https://unpkg.com/itto/itto.mjs"></script>`
 
 `import { game } from "itto"`
 
@@ -26,7 +26,7 @@ An itty bitty javascript game engine
 
 Call `game.play` to initialize the game loop. The function takes on object with 4 named parameters:
 
-* `settings` - an `object` containing the game settings. See [game settings](#game-settings)
+* `settings` - an `object` containing the game settings. See [game settings](#%EF%B8%8F-game-settings)
 * `init` - a `function` which runs once, on game start
 * `tick` - a `function` which runs on every game tick (by default, game runs at 60 ticks per second)
 * `draw` - a `function` which runs on every animation frame (always tries to target 60 frames per second)
@@ -67,7 +67,7 @@ game.play({
 
 ## 💾 Examples
 
-`🚧 TODO`
+[[[examples]]]
 
 ## ⚙️ Game settings
 
@@ -83,11 +83,41 @@ Inside `init`, `tick` or `draw` methods you can query different parameters from 
 
 ## 📦 Loading assets
 
-`🚧 TODO`
+In the game settings, you can use the `assets` object to map specific IDs to external resources you'd want to use during the game (for example, images to draw with the `image` function, or sounds to play with the `sound` function). The assets will be preloaded and processed accordingly. The `game.ready` variable will be set to `true` as soon as all assets are loaded, allowing you to create loading screens. 
+
+```js
+import { game, image, text } from "itto";
+
+game.play({
+  settings: {
+    assets: {
+      logo: "/assets/logo.png"
+    }
+  },
+  draw: () => {
+    if (itto.ready) {
+     clear(0);
+     text("Loading...", 8, 8)
+    }
+    clear(1);
+    image(logo, 16, 16);
+  },
+});
+```
+
+Assets are processed based on their extension:
+
+| Extension | Processed as  |
+| :--       | :-- |
+| `.jpg` `.jpeg` `.png` | [`HTMLImageElement`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image)
+| `.wav` `.mp3` `.ogg` | [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer)
+| everything else | Raw URL of the asset
+
+While assets are normally used by passing their IDs to specific functions, they can also be accessed at any time inside `game` by accessing `game.assets[id]`, provided they are loaded (if not, it will return a promise).
 
 ## ✨ Functions
 
-The library offers a barebone set of functions to build your game with. All methods are named imports from the `"itto"` namespace.
+The library offers a barebone set of functions to build your game with. All methods are named imports from the `"itto"` namespace or the global `itto` object.
 
 ### 🎨 Drawing 
 

@@ -44,6 +44,25 @@ const parseReadme = async (file) => {
     return api;
   });
 
+  const contentIncludes = /\[\[.*?\]\]/g;
+  content = await replaceAsync(content, contentIncludes, async (match) => {
+    const include = match.slice(2, match.length - 2);
+    switch (include) {
+      case "examples":
+        return fs.readdirSync(path.join(process.cwd(), "examples"), { withFileTypes: true })
+          .filter((dir) => dir.isDirectory())
+          .filter((dir) => !["assets", "dist"].includes(dir.name))
+          .filter((dir) => !dir.name.startsWith("."))
+          .map((dir) => `* [${dir.name}](https://leoncvlt.github.io/itto/${dir.name})`)
+          .join("\n");
+        break;
+
+      default:
+        break;
+    }
+    return "";
+  });
+
   return content;
 };
 

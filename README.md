@@ -6,13 +6,13 @@ An itty bitty javascript game engine
 
 ### Global Object
 
-`<script src="path/to/itto.js"></script>`
+`<script src="https://unpkg.com/itto/itto.js"></script>`
 
 `const { game } = itto`
 
 ### ES Module
 
-`<script type="module" src="path/to/itto.mjs"></script>`
+`<script type="module" src="https://unpkg.com/itto/itto.mjs"></script>`
 
 `import { game } from "itto"`
 
@@ -32,7 +32,7 @@ Call `game.play` to initialize the game loop. The function takes on object with 
 * `draw` - a `function` which runs on every animation frame (always tries to target 60 frames per second)
 
 ```js
-import { game, cls, circle } from "itto";
+import { game, clear, circle } from "itto";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
@@ -59,7 +59,7 @@ game.play({
     }
   },
   draw: () => {
-    cls(13);
+    clear(13);
     circle(x, y, r, 14);
   },
 });
@@ -67,7 +67,7 @@ game.play({
 
 ## 💾 Examples
 
-`🚧 TODO`
+]
 
 ## ⚙️ Game settings
 
@@ -77,6 +77,11 @@ The following properties can be passed to the `settings` parameter of the `game.
 | --- | --- | --- | --- |
 | [canvas] | <code>HTMLElement</code> | <code>document.querySelector(&quot;canvas&quot;)</code> | The canvas element. Defaults to the first canvas in the page. |
 | [size] | <code>Array.&lt;number&gt;</code> | <code>[240, 236]</code> | `[x, y]` tuple defining the width and height of the game |
+| resize | <code>string</code> | <code>&quot;integer&quot;</code> | The resizing behaviour - `itto` will attempt to resize the canvas to fill up its parent, while keeping the aspect ratio. "integer" will scale the canvas in integer increments (2x, 3x, etc). "linear" will always scale it to the max size. "none" or `null` will disable the automatic scaling, leaving you to sort out the canvas sizing manually |
+| [offset] | <code>number</code> \| <code>Array.&lt;number&gt;</code> | <code>0</code> | The amount of pixels to keep around the game area when resizing it. Pass a number for the same amount across all dimensions, or a `[x, y]` tuple to have different offset for the sides and the top/bottom |
+| [supersampling] | <code>number</code> | <code>0</code> | Scale the game's graphics up by this amount, before rendering them on the canvas. Can make text / shapes sharper (especially on Chrome) at the expense of worse performance |
+| [assets] | <code>object</code> | <code>{}</code> | An ojbect containing ID/Urls pairs for the external resources you want to preload and use in the game. See [Loading Assets](loading-assets) |
+| [palette] | <code>Array.&lt;number&gt;</code> | <code>[sweetie16]</code> | An array containing colors whose index can be passed to drawing functions (such as `clear` or `rect`. Defaults to the [Sweetie 16](https://lospec.com/palette-list/sweetie-16) palette) |
 
 
 
@@ -133,18 +138,48 @@ Whether the game assets have finished loading or not
 <a name="game.palette"></a>
 
 #### `game.palette` : <code>Array.&lt;number&gt;</code>
-The array of colors
+An array of colors as defined in the game settings
 
 <a name="game.assets"></a>
 
 #### `game.assets` : <code>object</code>
-The loaded assets, in a key:data format
+The external game assets, as defined in the game settings
 
 
 
 ## 📦 Loading assets
 
-`🚧 TODO`
+In the game settings, you can use the `assets` object to map specific IDs to external resources you'd want to use during the game (for example, images to draw with the `image` function, or sounds to play with the `sound` function). The assets will be preloaded and processed accordingly. The `game.ready` variable will be set to `true` as soon as all assets are loaded, allowing you to create loading screens. 
+
+```js
+import { game, image, text } from "itto";
+
+game.play({
+  settings: {
+    assets: {
+      logo: "/assets/logo.png"
+    }
+  },
+  draw: () => {
+    if (itto.ready) {
+     clear(0);
+     text("Loading...", 8, 8)
+    }
+    clear(1);
+    image(logo, 16, 16);
+  },
+});
+```
+
+Assets are processed based on their extension:
+
+| Extension | Processed as  |
+| :--       | :-- |
+| `.jpg` `.jpeg` `.png` | [`HTMLImageElement`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image)
+| `.wav` `.mp3` `.ogg` | [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer)
+| everything else | Raw URL of the asset
+
+While assets are normally used by passing their IDs to specific functions, they can also be accessed at any time inside `game` by accessing `game.assets[id]`, provided they are loaded (if not, it will return a promise).
 
 ## ✨ Functions
 
@@ -153,7 +188,7 @@ The library offers a barebone set of functions to build your game with. All meth
 ### 🎨 Drawing 
 
 <dl>
-<dt><a href="#cls">`cls(color)`</a></dt>
+<dt><a href="#clear">`clear(color)`</a></dt>
 <dd><p>Fills the screen with a solid color</p>
 </dd>
 <dt><a href="#line">`line(x0, y0, x1, y1, color)`</a></dt>
@@ -173,9 +208,9 @@ The library offers a barebone set of functions to build your game with. All meth
 </dd>
 </dl>
 
-<a name="cls"></a>
+<a name="clear"></a>
 
-### `cls(color)`
+### `clear(color)`
 Fills the screen with a solid color
 
 

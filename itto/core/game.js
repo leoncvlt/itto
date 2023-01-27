@@ -73,14 +73,14 @@ const game = {
     return _data[_current].ready;
   },
   /**
-   * The array of colors
+   * An array of colors as defined in the game settings
    * @type {Array<number>}
    */
   get palette() {
     return _data[_current].palette;
   },
   /**
-   * The loaded assets, in a key:data format
+   * The external game assets, as defined in the game settings
    * @type {object}
    */
   get assets() {
