@@ -1,4 +1,4 @@
-import { game, input, circle, cls, get, text, rect, set } from "../../itto/core";
+import { game, input, circle, clear, get, text, rect, set } from "../../itto/core";
 
 let score, top, lives;
 let started = false;
@@ -151,7 +151,7 @@ game.play({
 
   draw: () => {
     // clear the screen
-    cls(13);
+    clear(13);
 
     // draw the bricks
     bricks.forEach((brick) => {

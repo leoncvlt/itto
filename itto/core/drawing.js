@@ -34,7 +34,7 @@ const parseColor = (color, rgb) => {
  * Fills the screen with a solid color
  * @param {number|string} color - the color to fill the screen with. Omit to use a transparent color
  */
-const cls = (color) => {
+const clear = (color) => {
   const { context, width, height } = game;
   if (color !== null) {
     context.fillStyle = parseColor(color);
@@ -185,4 +185,4 @@ const text = (text, x, y, color = 0, { size = 8, align = "left", font = "itto" }
   context.fillText(text, Math.floor(x), Math.floor(y));
 };
 
-export { cls, image, line, rect, circle, text };
+export { clear as clear, image, line, rect, circle, text };

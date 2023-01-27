@@ -1,4 +1,4 @@
-import { game, cls, rect, text } from "../../itto/core";
+import { game, clear, rect, text } from "../../itto/core";
 
 game.play({
   settings: {
@@ -8,7 +8,7 @@ game.play({
     palette: [0x1a1c2c, 0x94b0c2, 0xb13e53],
   },
   draw() {
-    cls(0);
+    clear(0);
     text("Hello ITTO 1!", game.width / 2, 8, 1, { align: "center" });
     for (let i = 0; i < 4; i++) {
       rect(game.width / 2 - 16 + Math.sin(game.elapsed / 16) * 16, game.height / 2 - 16, 32, 32, 2);
@@ -24,7 +24,7 @@ game.play({
     palette: [0x1a1c2c, 0x94b0c2, 0x41a6f6],
   },
   draw() {
-    cls(0);
+    clear(0);
     text("Hello ITTO 2!", game.width / 2, 8, 1, { align: "center" });
     for (let i = 0; i < 4; i++) {
       rect(game.width / 2 - 16, game.height / 2 - 16 + Math.sin(game.elapsed / 16) * 16, 32, 32, 2);
@@ -43,7 +43,7 @@ game.play({
     console.dir(itto);
   },
   draw() {
-    cls(0);
+    clear(0);
     text("Hello ITTO 3!", game.width / 2, 8, 1, { align: "center" });
     for (let i = 0; i < 4; i++) {
       rect(

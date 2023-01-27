@@ -1,4 +1,4 @@
-import { game, input, pointer, circle, cls, line, text, image, sound } from "../../itto/core";
+import { game, input, pointer, circle, clear, line, text, image, sound } from "../../itto/core";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
@@ -11,8 +11,8 @@ game.play({
     offset: [96, 64],
     supersampling: 0,
     assets: {
-      characters: "/characters.png",
-      jump: "/jump.wav",
+      characters: "../assets/characters.png",
+      jump: "../assets/jump.wav",
     },
     palette: [
       0x1a1c2c, 0x5d275d, 0xb13e53, 0xef7d57, 0xffcd75, 0xa7f070, 0x38b764, 0x257179, 0x29366f,
@@ -20,7 +20,7 @@ game.play({
     ],
   },
   init: () => {
-    cls("grey");
+    clear("grey");
     text("Hello World!", 4, 8);
     line(0, 0, 240, 136, "black", true);
     line(0, 136, 136, 0, "black");
@@ -46,12 +46,12 @@ game.play({
 
   draw: () => {
     if (!game.ready) {
-      cls(0);
+      clear(0);
       text("Now Loading...", 4, 8, 14);
       return;
     }
 
-    cls(13);
+    clear(13);
 
     circle(x, y, 4, 14);
 

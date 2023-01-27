@@ -1,4 +1,4 @@
-import { game, input, circle, cls, get, text, rect, set } from "../../itto/core";
+import { game, input, circle, clear, get, text, rect, set } from "../../itto/core";
 
 let timer = 0;
 let score, top;
@@ -144,7 +144,7 @@ game.play({
 
   draw: () => {
     // clear the screen
-    cls(6);
+    clear(6);
 
     circle(snake.x + 4, snake.y + 4, 4, alive ? 7 : 15);
     snake.body.forEach((body) => {

@@ -1,4 +1,4 @@
-import { game, cls, text } from "../../itto/core";
+import { game, clear, text } from "../../itto/core";
 
 const str = "HELLO ITTO!";
 const size = 8;
@@ -8,7 +8,7 @@ const amp = 8;
 
 game.play({
   draw() {
-    cls(0);
+    clear(0);
     for (let i = 0; i < str.length; i++) {
       text(
         str[i],

@@ -32,7 +32,7 @@ Call `game.play` to initialize the game loop. The function takes on object with 
 * `draw` - a `function` which runs on every animation frame (always tries to target 60 frames per second)
 
 ```js
-import { game, cls, circle } from "itto";
+import { game, clear, circle } from "itto";
 
 let x, y;
 let dx = Math.sign(Math.random() - 0.5) * 2;
@@ -59,7 +59,7 @@ game.play({
     }
   },
   draw: () => {
-    cls(13);
+    clear(13);
     circle(x, y, r, 14);
   },
 });

@@ -1,4 +1,4 @@
-import { game, cls, image, input, text } from "../../itto/core";
+import { game, clear, image, input, text } from "../../itto/core";
 
 let rotate = true;
 let scale = true;
@@ -78,11 +78,11 @@ game.play({
 
   draw: () => {
     if (!game.ready) {
-      cls(0);
+      clear(0);
       return;
     }
 
-    cls(14);
+    clear(14);
 
     aliens.forEach((alien) => alien.draw(game.delta));
 
