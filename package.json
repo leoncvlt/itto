@@ -12,6 +12,7 @@
   },
   "scripts": {
     "start": "node ./scripts/start-example.js",
+    "test": "echo \"No test specified\"",
     "build": "vite build ./itto",
     "start:examples": "vite ./examples --open",
     "build:examples": "vite build ./examples",
