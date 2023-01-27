@@ -26,7 +26,7 @@ An itty bitty javascript game engine
 
 Call `game.play` to initialize the game loop. The function takes on object with 4 named parameters:
 
-* `settings` - an `object` containing the game settings. See [game settings](#game-settings)
+* `settings` - an `object` containing the game settings. See [game settings](#%EF%B8%8F-game-settings)
 * `init` - a `function` which runs once, on game start
 * `tick` - a `function` which runs on every game tick (by default, game runs at 60 ticks per second)
 * `draw` - a `function` which runs on every animation frame (always tries to target 60 frames per second)
@@ -67,7 +67,10 @@ game.play({
 
 ## 💾 Examples
 
-]
+* [benchmark](https://leoncvlt.github.io/itto/benchmark)
+* [breakout](https://leoncvlt.github.io/itto/breakout)
+* [hello](https://leoncvlt.github.io/itto/hello)
+* [snake](https://leoncvlt.github.io/itto/snake)
 
 ## ⚙️ Game settings
 
@@ -80,7 +83,7 @@ The following properties can be passed to the `settings` parameter of the `game.
 | resize | <code>string</code> | <code>&quot;integer&quot;</code> | The resizing behaviour - `itto` will attempt to resize the canvas to fill up its parent, while keeping the aspect ratio. "integer" will scale the canvas in integer increments (2x, 3x, etc). "linear" will always scale it to the max size. "none" or `null` will disable the automatic scaling, leaving you to sort out the canvas sizing manually |
 | [offset] | <code>number</code> \| <code>Array.&lt;number&gt;</code> | <code>0</code> | The amount of pixels to keep around the game area when resizing it. Pass a number for the same amount across all dimensions, or a `[x, y]` tuple to have different offset for the sides and the top/bottom |
 | [supersampling] | <code>number</code> | <code>0</code> | Scale the game's graphics up by this amount, before rendering them on the canvas. Can make text / shapes sharper (especially on Chrome) at the expense of worse performance |
-| [assets] | <code>object</code> | <code>{}</code> | An ojbect containing ID/Urls pairs for the external resources you want to preload and use in the game. See [Loading Assets](loading-assets) |
+| [assets] | <code>object</code> | <code>{}</code> | An ojbect containing ID/Urls pairs for the external resources you want to preload and use in the game. See [Loading Assets](#-loading-assets) |
 | [palette] | <code>Array.&lt;number&gt;</code> | <code>[sweetie16]</code> | An array containing colors whose index can be passed to drawing functions (such as `clear` or `rect`. Defaults to the [Sweetie 16](https://lospec.com/palette-list/sweetie-16) palette) |
 
 
@@ -183,7 +186,7 @@ While assets are normally used by passing their IDs to specific functions, they 
 
 ## ✨ Functions
 
-The library offers a barebone set of functions to build your game with. All methods are named imports from the `"itto"` namespace.
+The library offers a barebone set of functions to build your game with. All methods are named imports from the `"itto"` namespace or the global `itto` object.
 
 ### 🎨 Drawing 
 

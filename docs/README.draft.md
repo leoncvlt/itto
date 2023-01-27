@@ -67,7 +67,7 @@ game.play({
 
 ## 💾 Examples
 
-[[[examples]]]
+[[examples]]
 
 ## ⚙️ Game settings
 
