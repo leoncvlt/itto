@@ -1,7 +1,7 @@
 {
   "name": "itto",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "./itto/dist/itto.mjs",
   "module": "./itto/dist/itto.mjs",
   "files": [
