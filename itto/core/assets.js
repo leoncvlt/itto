@@ -1,35 +1,24 @@
 import { audioContext } from "./audio";
 
-/**
- * @ignore
- * Tests a filename's extension against a list
- * @param {string} path - the path of the file to test
- * @param {string[]} extensions - an array of the extensions to test against
- * @returns {boolean}
- */
-const testExtension = (path, extensions = []) => {
-  const extension = path.substring(path.lastIndexOf(".") + 1, path.length) || path;
-  return extensions.includes(extension.toLowerCase());
-};
-
 const loadAsset = async (path) => {
   if (Array.isArray(path)) {
     const assets = await Promise.all(path.map((nestedAsset) => loadAsset(nestedAsset)));
     return assets;
   }
-  if (testExtension(path, ["jpg", "jpeg", "png"])) {
+  if (/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(path)) {
     return new Promise((resolve) => {
       const image = new Image();
       image.onload = resolve(image);
       image.src = path;
     });
-  } else if (testExtension(path, ["wav", "mp3", "ogg"])) {
+  } else if (/\.(wav|mp3|ogg)$/i.test(path)) {
     const response = await fetch(path);
     const arrayBuffer = await response.arrayBuffer();
     const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
     return audioBuffer;
   } else {
-    console.warn(`Unsure how to load asset ${path}`);
+    console.warn(`Unsure how to load asset ${path}, setting raw URL`);
+    return path;
   }
 };
 
